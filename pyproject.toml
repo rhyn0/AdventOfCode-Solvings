@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "RO-AdventOfCode"
-version = "0.5.0"
+version = "0.6.0"
 description = "Solvings for Advent of Code years"
 authors = ["Ryan Ozawa <ryan.ozawa21@gmail.com>"]
 license = "MIT"
@@ -17,6 +17,7 @@ numpy = "^1.24.2"
 pre-commit = "^3.2.1"
 ruff = "^0.0.259"
 black = "^23.1.0"
+aocd = "^0.1"
 
 
 [tool.poetry.group.test.dependencies]
