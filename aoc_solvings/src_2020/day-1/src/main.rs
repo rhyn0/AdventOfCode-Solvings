@@ -9,13 +9,13 @@ fn main() {
 }
 
 fn get_input(input_file: &String) -> String {
-    return std::fs::read_to_string(input_file).unwrap();
+    std::fs::read_to_string(input_file).unwrap()
 }
 
 fn input_string_to_vec(str: String) -> Vec<i64> {
     return str
         .split('\n')
-        .filter(|line| line.len() > 0)
+        .filter(|line| !line.is_empty())
         .map(|x| x.parse().unwrap())
         .collect();
 }
@@ -29,7 +29,7 @@ fn part1(nums: &Vec<i64>) -> i64 {
         }
         remainders.insert(remain, *num);
     }
-    return 0;
+    0
 }
 
 fn part2(mut nums: Vec<i64>) -> i64 {
@@ -44,12 +44,12 @@ fn part2(mut nums: Vec<i64>) -> i64 {
     for (i, x) in nums.iter().enumerate() {
         let mut j = i + 1;
         while j < nums.len() {
-            let required: i64 = (2020 - x - nums[j]).into();
+            let required: i64 = 2020 - x - nums[j];
             if remainders.contains_key(&required) && remainders.get(&required).unwrap() > &j {
                 return x * nums[j] * required;
             }
             j += 1;
         }
     }
-    return 0;
+    0
 }
