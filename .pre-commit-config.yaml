@@ -39,4 +39,12 @@ repos:
     hooks:
       - id: clippy
         name: clippy-2020 # do it this ugly way until i learn Rust packaging
-        args: ["--manifest-path", "aoc_solvings/src_2020/Cargo.toml"]
+        args:
+          [
+            "--manifest-path",
+            "aoc_solvings/src_2020/Cargo.toml",
+            "--all",
+            "--",
+            "-D",
+            "warnings",
+          ]
