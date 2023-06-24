@@ -34,3 +34,9 @@ repos:
     hooks:
       - id: isort
         name: isort
+  - repo: https://github.com/doublify/pre-commit-rust
+    rev: "v1.0"
+    hooks:
+      - id: clippy
+        name: clippy-2020 # do it this ugly way until i learn Rust packaging
+        args: ["--manifest-path", "aoc_solvings/src_2020/Cargo.toml"]
