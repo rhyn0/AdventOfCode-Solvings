@@ -72,7 +72,7 @@ fn _valid_hcl(hcl_value: &str) -> bool {
 fn _valid_hgt(hgt_value: &str) -> bool {
     let hgt = hgt_value
         .chars()
-        .take_while(|x| x.is_ascii_digit())
+        .take_while(char::is_ascii_digit)
         .collect::<String>()
         .parse()
         .unwrap();
@@ -92,7 +92,7 @@ fn _valid_ecl(ecl_value: &str) -> bool {
 }
 
 fn _valid_pid(pid_value: &str) -> bool {
-    pid_value.len() == 9 && pid_value.chars().filter(|c| c.is_ascii_digit()).count() == 9
+    pid_value.len() == 9 && pid_value.chars().filter(char::is_ascii_digit).count() == 9
 }
 
 fn part2(pports: &[Passport]) -> u128 {

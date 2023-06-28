@@ -16,7 +16,7 @@ fn seat_id((row, col): (u64, u64)) -> u128 {
     (row * 8 + col).into()
 }
 
-fn _parse_bin_section(section_str: String, one: char) -> u64 {
+fn _parse_bin_section(section_str: &str, one: char) -> u64 {
     u64::from_str_radix(
         &section_str
             .chars()
@@ -29,8 +29,8 @@ fn _parse_bin_section(section_str: String, one: char) -> u64 {
 
 fn _parse_boarding_pass(pass: &str) -> (u64, u64) {
     (
-        _parse_bin_section(pass[..7].to_string(), 'B'),
-        _parse_bin_section(pass[7..].to_string(), 'R'),
+        _parse_bin_section(&pass[..7], 'B'),
+        _parse_bin_section(&pass[7..], 'R'),
     )
 }
 
@@ -51,7 +51,7 @@ fn part2(mut passes: Vec<(u64, u64)>) -> u128 {
     passes.sort_by_key(|p| p.0);
     passes.sort_by_key(|p| p.1);
     for (row, col) in passes {
-        seat_grid[row as usize][col as usize] = true;
+        seat_grid[usize::try_from(row).unwrap()][usize::try_from(col).unwrap()] = true;
     }
     let row_id = seat_grid
         .iter()

@@ -20,7 +20,7 @@ fn get_input(input_file: &String) -> String {
     std::fs::read_to_string(input_file).unwrap()
 }
 
-fn parse_password_attempt_line(cap: Captures) -> PasswordAttempt {
+fn parse_password_attempt_line(cap: &Captures) -> PasswordAttempt {
     let p = PasswordAttempt {
         min_amount: cap[1].parse().unwrap(),
         max_amount: cap[2].parse().unwrap(),
@@ -36,7 +36,7 @@ fn parse_password_attempts(input: &str) -> Vec<PasswordAttempt> {
         .split('\n')
         .filter(|line| !line.is_empty())
         .map(|x| re.captures(x).unwrap())
-        .map(parse_password_attempt_line)
+        .map(|cap| parse_password_attempt_line(&cap))
         .collect();
 }
 

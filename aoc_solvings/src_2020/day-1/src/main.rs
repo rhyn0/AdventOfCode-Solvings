@@ -3,7 +3,7 @@ use std::env;
 fn main() {
     let args: Vec<String> = env::args().collect();
     let input_str = get_input(&args[1]);
-    let num_vec = input_string_to_vec(input_str);
+    let num_vec = input_string_to_vec(&input_str);
     println!("Part 1: {}", part1(&num_vec));
     println!("Part 2: {}", part2(num_vec));
 }
@@ -12,7 +12,7 @@ fn get_input(input_file: &String) -> String {
     std::fs::read_to_string(input_file).unwrap()
 }
 
-fn input_string_to_vec(str: String) -> Vec<i64> {
+fn input_string_to_vec(str: &str) -> Vec<i64> {
     return str
         .split('\n')
         .filter(|line| !line.is_empty())
@@ -34,7 +34,7 @@ fn part1(nums: &Vec<i64>) -> i64 {
 
 fn part2(mut nums: Vec<i64>) -> i64 {
     let mut remainders = HashMap::new();
-    nums.sort();
+    nums.sort_unstable();
     if nums.len() < 3 {
         return 0;
     }

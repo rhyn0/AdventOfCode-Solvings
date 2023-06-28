@@ -43,8 +43,13 @@ repos:
           [
             "--manifest-path",
             "aoc_solvings/src_2020/Cargo.toml",
-            "--all",
             "--",
             "-D",
             "warnings",
+            "-D",
+            "clippy::pedantic",
+            "-D",
+            "clippy::nursery",
+            "-D",
+            "clippy::all",
           ]
