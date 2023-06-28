@@ -3,7 +3,7 @@ use std::env;
 fn main() {
     let args: Vec<String> = env::args().collect();
     let input_str = get_input(&args[1]);
-    let turns = input_string_to_vec(input_str);
+    let turns = input_string_to_vec(&input_str);
     println!("Part 1: {}", part1(&turns));
     println!("Part 2: {}", part2(&turns));
 }
@@ -12,7 +12,7 @@ fn get_input(input_file: &String) -> String {
     std::fs::read_to_string(input_file).unwrap()
 }
 
-fn input_string_to_vec(str: String) -> Vec<String> {
+fn input_string_to_vec(str: &str) -> Vec<String> {
     // first line is commands
     return str
         .lines()
