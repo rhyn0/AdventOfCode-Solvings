@@ -85,9 +85,7 @@ fn bag_count_iter<'iter, 'elems: 'iter>(
             .into_iter()
             .flatten()
             .flat_map(move |&(qt, neighbor)| {
-                std::iter::once(qt)
-                    .chain(bag_count_iter(graph, &neighbor))
-                    .map(move |x| x * qt)
+                std::iter::once(qt).chain(bag_count_iter(graph, &neighbor).map(move |x| x * qt))
             }),
     )
 }
