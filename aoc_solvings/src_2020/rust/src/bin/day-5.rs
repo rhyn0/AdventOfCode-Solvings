@@ -65,3 +65,24 @@ fn part2(mut passes: Vec<(u64, u64)>) -> u128 {
         .unwrap();
     seat_id((row_id as u64, col_id as u64))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const TEST_FILE: &str = "inputs/test-5.txt";
+    fn _input_setup() -> Vec<(u64, u64)> {
+        parse_boarding_passes(&get_input(&TEST_FILE.to_string()))
+    }
+
+    #[test]
+    fn correct_part1() {
+        assert_eq!(part1(&_input_setup()), 820);
+    }
+
+    #[test]
+    #[should_panic]
+    fn correct_part2() {
+        part2(_input_setup());
+    }
+}

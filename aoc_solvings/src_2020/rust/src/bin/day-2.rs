@@ -79,3 +79,23 @@ fn part2(pswds: &Vec<PasswordAttempt>) -> u64 {
     }
     count
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const TEST_FILE: &str = "inputs/test-2.txt";
+    fn _input_setup() -> Vec<PasswordAttempt> {
+        parse_password_attempts(&get_input(&TEST_FILE.to_string()))
+    }
+
+    #[test]
+    fn correct_part1() {
+        assert_eq!(part1(&_input_setup()), 2);
+    }
+
+    #[test]
+    fn correct_part2() {
+        assert_eq!(part2(&_input_setup()), 1);
+    }
+}

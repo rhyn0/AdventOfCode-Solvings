@@ -53,3 +53,23 @@ fn part2(trees: &Vec<Vec<char>>) -> u128 {
         .collect();
     all_slopes.iter().product()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const TEST_FILE: &str = "inputs/test-3.txt";
+    fn _input_setup() -> Vec<Vec<char>> {
+        parse_trees(&get_input(&TEST_FILE.to_string()))
+    }
+
+    #[test]
+    fn correct_part1() {
+        assert_eq!(part1(&_input_setup()), 7);
+    }
+
+    #[test]
+    fn correct_part2() {
+        assert_eq!(part2(&_input_setup()), 336);
+    }
+}

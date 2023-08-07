@@ -64,7 +64,7 @@ fn _valid_hcl(hcl_value: &str) -> bool {
         && hcl_value.starts_with('#')
         && hcl_value[1..]
             .chars()
-            .filter(|c| c.is_ascii_hexdigit() || c.is_ascii_digit())
+            .filter(char::is_ascii_hexdigit)
             .count()
             == 6
 }
@@ -114,4 +114,24 @@ fn part2(pports: &[Passport]) -> u128 {
         .count()
         .try_into()
         .unwrap()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const TEST_FILE: &str = "inputs/test-4.txt";
+    fn _input_setup() -> Vec<Passport> {
+        parse_passports(&get_input(&TEST_FILE.to_string()))
+    }
+
+    #[test]
+    fn correct_part1() {
+        assert_eq!(part1(&_input_setup()), 2);
+    }
+
+    #[test]
+    fn correct_part2() {
+        assert_eq!(part2(&_input_setup()), 2);
+    }
 }

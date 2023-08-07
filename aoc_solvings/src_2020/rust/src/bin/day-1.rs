@@ -53,3 +53,23 @@ fn part2(mut nums: Vec<i64>) -> i64 {
     }
     0
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const TEST_FILE: &str = "inputs/test-1.txt";
+    fn _input_setup() -> Vec<i64> {
+        input_string_to_vec(&get_input(&TEST_FILE.to_string()))
+    }
+
+    #[test]
+    fn correct_part1() {
+        assert_eq!(part1(&_input_setup()), 514579);
+    }
+
+    #[test]
+    fn correct_part2() {
+        assert_eq!(part2(_input_setup()), 241861950);
+    }
+}

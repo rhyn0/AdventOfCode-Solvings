@@ -42,7 +42,7 @@ repos:
         args:
           [
             "--manifest-path",
-            "aoc_solvings/src_2020/Cargo.toml",
+            "aoc_solvings/src_2020/rust/Cargo.toml",
             "--",
             "-D",
             "warnings",

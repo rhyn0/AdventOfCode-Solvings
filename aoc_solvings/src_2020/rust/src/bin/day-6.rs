@@ -60,3 +60,23 @@ fn part2(groups: &[String]) -> u128 {
     let group_answers = parse_customs_everyone(groups);
     get_total_length(&group_answers)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const TEST_FILE: &str = "inputs/test-6.txt";
+    fn _input_setup() -> Vec<String> {
+        parse_input_to_groups(&get_input(&TEST_FILE.to_string()))
+    }
+
+    #[test]
+    fn correct_part1() {
+        assert_eq!(part1(&_input_setup()), 11);
+    }
+
+    #[test]
+    fn correct_part2() {
+        assert_eq!(part2(&_input_setup()), 6);
+    }
+}

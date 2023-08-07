@@ -93,3 +93,25 @@ fn bag_count_iter<'iter, 'elems: 'iter>(
 fn part2(rules: &Rules<'_>, start: &Bag) -> u128 {
     bag_count_iter(rules, start).sum::<usize>() as u128
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const TEST_FILE: &str = "inputs/test-7.txt";
+    const GOAL_BAG: Bag = ("shiny", "gold");
+
+    #[test]
+    fn correct_part1() {
+        let input = get_input(&TEST_FILE.to_string());
+
+        assert_eq!(part1(&parse_input_to_rules(&input), &GOAL_BAG), 4);
+    }
+
+    #[test]
+    fn correct_part2() {
+        let input = get_input(&TEST_FILE.to_string());
+
+        assert_eq!(part2(&parse_input_to_rules(&input), &GOAL_BAG), 32);
+    }
+}
