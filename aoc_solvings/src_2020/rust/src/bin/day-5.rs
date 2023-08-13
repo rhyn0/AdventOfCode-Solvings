@@ -1,3 +1,5 @@
+use itertools::Itertools;
+use std::collections::HashSet;
 use std::env;
 
 fn main() {
@@ -5,7 +7,7 @@ fn main() {
     let input_str = get_input(&args[1]);
     let boarding_passes = parse_boarding_passes(&input_str);
     println!("Part 1: {}", part1(&boarding_passes));
-    println!("Part 2: {}", part2(boarding_passes));
+    println!("Part 2: {}", part2_alt(&boarding_passes));
 }
 
 fn get_input(input_file: &String) -> String {
@@ -46,11 +48,10 @@ fn part1(passes: &[(u64, u64)]) -> u128 {
     passes.iter().map(|p| seat_id(*p)).max().unwrap()
 }
 
-fn part2(mut passes: Vec<(u64, u64)>) -> u128 {
+#[allow(dead_code)]
+fn part2(passes: &[(u64, u64)]) -> u128 {
     let mut seat_grid: Vec<Vec<bool>> = vec![vec![false; 8]; 128];
-    passes.sort_by_key(|p| p.0);
-    passes.sort_by_key(|p| p.1);
-    for (row, col) in passes {
+    for &(row, col) in passes.iter().sorted_by_key(|p| p.0).sorted_by_key(|p| p.1) {
         seat_grid[usize::try_from(row).unwrap()][usize::try_from(col).unwrap()] = true;
     }
     let row_id = seat_grid
@@ -64,6 +65,18 @@ fn part2(mut passes: Vec<(u64, u64)>) -> u128 {
         .position(|val| !*val)
         .unwrap();
     seat_id((row_id as u64, col_id as u64))
+}
+
+fn part2_alt(passes: &[(u64, u64)]) -> u128 {
+    let seats: HashSet<u128> = passes.iter().map(|&seat| seat_id(seat)).sorted().collect();
+    let (&min_seat, &max_seat) = (seats.iter().min().unwrap(), seats.iter().max().unwrap());
+    for my_seat in min_seat..max_seat {
+        if seats.contains(&my_seat) {
+            continue;
+        }
+        return my_seat;
+    }
+    panic!("My seat is MISSING");
 }
 
 #[cfg(test)]
@@ -83,6 +96,15 @@ mod tests {
     #[test]
     #[should_panic]
     fn correct_part2() {
-        part2(_input_setup());
+        // this panics due to not having enough inputs in the test file
+        // this is the shortcoming of this memory intensive method
+        part2(&_input_setup());
+    }
+
+    #[test]
+    fn correct_part2_alt() {
+        // minimum seat id is 119 in the 3 seats given
+        // and since 120 is not one of the 3 seats, it assumes this is answer
+        assert_eq!(part2_alt(&_input_setup()), 120);
     }
 }
