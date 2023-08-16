@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "RO-AdventOfCode"
-version = "0.9.0"
+version = "0.10.0"
 description = "Solvings for Advent of Code years"
 authors = ["Ryan Ozawa <ryan.ozawa21@gmail.com>"]
 license = "MIT"

@@ -83,10 +83,7 @@ fn parse_input_to_ops(input: &str) -> Vec<Op> {
         .collect_vec()
 }
 
-/*
- * Returns value of accumulator prior to loop.
- */
-fn part1(instructions: &mut Vec<Op>) -> isize {
+fn executed_op_set(instructions: &mut Vec<Op>) -> (HashSet<usize>, ProgramState) {
     let mut iter = itertools::iterate(Some(ProgramState::default()), |s| {
         s.unwrap().next(instructions)
     });
@@ -95,6 +92,13 @@ fn part1(instructions: &mut Vec<Op>) -> isize {
         .find(|op| !set.insert(op.unwrap().pc))
         .unwrap()
         .unwrap();
+    (set, repeated_op)
+}
+/*
+ * Returns value of accumulator prior to loop.
+ */
+fn part1(instructions: &mut Vec<Op>) -> isize {
+    let (_, repeated_op) = executed_op_set(instructions);
     repeated_op.accumulator
 }
 
@@ -109,9 +113,11 @@ fn flip_op_type(instr: &mut OpAction) {
 #[allow(dead_code)]
 fn find_variant(instructions: &[Op]) {
     // all possible switches
-    let mut variants: Vec<_> = instructions
+    let (seen_instrs, _) = executed_op_set(&mut instructions.to_owned());
+
+    let mut variants: Vec<_> = seen_instrs
         .iter()
-        .enumerate()
+        .map(|&idx| (idx, instructions[idx]))
         .filter_map(|(index, op)| match op.op_type {
             OpAction::Jump | OpAction::NoOp => Some(index),
             OpAction::Accumulate => None,
@@ -147,6 +153,7 @@ fn eval_program(ops: &Vec<Op>) -> Option<isize> {
 }
 
 fn part2(instructions: &mut Vec<Op>, flip_idx: Option<usize>) -> isize {
+    find_variant(instructions);
     let flip_idx = flip_idx.unwrap_or(198); // via running find_variant
     flip_op_type(&mut instructions[flip_idx].op_type);
     eval_program(instructions).unwrap()
