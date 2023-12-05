@@ -14,7 +14,7 @@ fn solve_day(day: u16) -> fn(Option<&str>) -> SolutionPair {
         1 => Days::day01::solve,
         2 => Days::day02::solve,
         3 => Days::day03::solve,
-        // 4 => Days::day04::solve,
+        4 => Days::day04::solve,
         // 5 => Days::day05::solve,
         // 6 => Days::day06::solve,
         // 7 => Days::day07::solve,
