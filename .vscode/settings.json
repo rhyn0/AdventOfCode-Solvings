@@ -1,6 +1,4 @@
 {
-    "editor.wordWrap": "wordWrapColumn",
-    "editor.wordWrapColumn": 90,
     "rust-analyzer.linkedProjects": [
         "./aoc_solvings/src_2023/rust/Cargo.toml",
     ],
