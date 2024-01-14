@@ -3,7 +3,6 @@
 # Update this file:
 #   pre-commit autoupdate
 fail_fast: true
-exclude: ^.vscode/$
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
@@ -34,22 +33,8 @@ repos:
     hooks:
       - id: isort
         name: isort
-  - repo: https://github.com/doublify/pre-commit-rust
-    rev: "v1.0"
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: "v1.8.0"
     hooks:
-      - id: clippy
-        name: clippy-2023 # do it this ugly way until i learn Rust packaging
-        args:
-          [
-            "--manifest-path",
-            "aoc_solvings/src_2023/rust/Cargo.toml",
-            "--",
-            "-D",
-            "warnings",
-            "-D",
-            "clippy::pedantic",
-            "-D",
-            "clippy::nursery",
-            "-D",
-            "clippy::all",
-          ]
+      - id: mypy
+        args: ["--config-file=pyproject.toml"]

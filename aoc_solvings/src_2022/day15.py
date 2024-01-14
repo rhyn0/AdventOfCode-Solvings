@@ -225,7 +225,8 @@ class Day15(Day):
         """Return sensor, beacon pairs."""
         pttrn = re.compile(r"x=(-?\d+),\sy=(-?\d+)", re.I)
         return [
-            tuple(Point(*map(int, x)) for x in pttrn.findall(line))
+            # this findall will always return 2 items
+            tuple(Point(*map(int, x)) for x in pttrn.findall(line))  # type: ignore[misc]
             for line in puzzle_input.splitlines()
         ]
 
@@ -262,7 +263,7 @@ class Day15(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 15, 2022
     day = Day15()
     if args["--example"] or args["--verbose"]:

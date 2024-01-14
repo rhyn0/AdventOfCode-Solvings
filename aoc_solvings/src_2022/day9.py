@@ -175,7 +175,7 @@ class Day9(Day):
                     curr_knot.follow(prev_knot)
                 tail_point_set.add(tuple(knots[-1]))
         LOG.info("%s", tail_point_set)
-        return tail_point_set
+        return tail_point_set  # type: ignore[return-value]
 
     def part1(self, data: list[list[str]]) -> int:
         """Return number of unique places the tail visited.
@@ -214,7 +214,7 @@ if __name__ == "__main__":
     DAY, YEAR = 9, 2022
     day = eval(f"Day{DAY}()")
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     LOG.setLevel(logging.CRITICAL if not args["--example"] else logging.DEBUG)
     data = get_data(day=DAY, year=YEAR) if not args["--example"] else EXAMPLE
     answers = day.solve(data)

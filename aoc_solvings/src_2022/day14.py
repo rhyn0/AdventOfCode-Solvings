@@ -241,7 +241,7 @@ class Day14(Day):
 
         Rocks will be represented by 1, air by 0.
         """
-        rocks = set()
+        rocks: set[tuple[int, int]] = set()
         lower_bound = 0
         for line in puzzle_input.splitlines():
             for pt1, pt2 in pairwise(line.split("->")):
@@ -277,7 +277,7 @@ class Day14(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 14, 2022
     day = Day14()
     if args["--example"] or args["--verbose"]:

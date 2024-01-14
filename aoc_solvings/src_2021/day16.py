@@ -261,11 +261,12 @@ class Day16(Day):
     def part2(self, data: list[list[int]]) -> int:
         """Return count of max element minus count of min element after insertions."""
         LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
+        return -1
 
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 16, 2021
     day = Day16()
     if args["--example"] or args["--verbose"]:

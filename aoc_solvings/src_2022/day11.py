@@ -132,7 +132,7 @@ class Day11(Day):
     def parse(self, data_input: str) -> list[Monkey]:
         """Given input split create monkeys and starting items."""
         datalines = data_input.splitlines()
-        monkeys = []
+        monkeys: list[Monkey] = []
         line_no = 0
         while line_no < len(datalines):
             items = [
@@ -236,7 +236,7 @@ if __name__ == "__main__":
     DAY, YEAR = 11, 2022
     day = eval(f"Day{DAY}()")
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     if args["--example"]:
         LOG.addHandler(logging.FileHandler(f"{sys.path[1]}/{LOG_NAME}.txt", "w"))
         LOG.setLevel(logging.DEBUG)

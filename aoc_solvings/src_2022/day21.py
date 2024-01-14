@@ -167,13 +167,13 @@ class Monkey:
         left, right = self.monkey_sources
         if left.find_human():
             humn_branch = left
-            remain = self.REV_OPERS[self.oper](root_val, right.get_value())  # type: ignore
+            remain = self.REV_OPERS[self.oper](root_val, right.get_value())
         elif self.oper in (sub, floordiv):
             humn_branch = right
-            remain = self.oper(left.get_value(), root_val)  # type: ignore
+            remain = self.oper(left.get_value(), root_val)
         else:
             humn_branch = right
-            remain = self.REV_OPERS[self.oper](root_val, left.get_value())  # type: ignore
+            remain = self.REV_OPERS[self.oper](root_val, left.get_value())
 
         LOG.debug(
             "From %r, human branch should be %r and sanity check %r",
@@ -265,7 +265,7 @@ class Day21(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 21, 2022
     day = Day21()
 

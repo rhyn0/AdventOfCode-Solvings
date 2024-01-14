@@ -189,7 +189,7 @@ class Day20(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 20, 2022
     day = Day20()
     if args["--example"] or args["--verbose"]:

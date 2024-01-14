@@ -198,7 +198,9 @@ class Day10(Day):
         return [line.split(" ") for line in data_input.splitlines()]
 
     @staticmethod
-    def _print_crt(print_f: Callable, cycle_no: int, register_x: int) -> None:
+    def _print_crt(
+        print_f: Callable[..., None], cycle_no: int, register_x: int
+    ) -> None:
         pixel = (cycle_no - 1) % 40
         LOG.debug(
             "putting a %r during cycle %d with register %d",
@@ -219,7 +221,7 @@ class Day10(Day):
         for _ in range(cycle_up):
             cycle_no += 1
             cls._print_crt(
-                print if verbose else lambda *args, **kwargs: None,
+                print if verbose else lambda *args, **kwargs: None,  # type: ignore [arg-type]
                 cycle_no,
                 register_x,
             )
@@ -291,7 +293,7 @@ class Day10(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 10, 2022
     day = Day10()
     if args["--example"] or args["--verbose"]:

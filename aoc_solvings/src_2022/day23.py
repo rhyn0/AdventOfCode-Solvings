@@ -212,8 +212,10 @@ class Day23(Day):
         Returns:
             tuple[int, int, int, int]: x_min, y_min, x_max, y_max
         """
-        h_min, h_max = float("inf"), 0
-        w_min, w_max = float("inf"), 0
+        h_min: float | int = float("inf")
+        h_max = 0
+        w_min: float | int = float("inf")
+        w_max = 0
         for point in points:
             h_min = min(h_min, point.y_pos)
             h_max = max(h_max, point.y_pos)
@@ -288,7 +290,7 @@ class Day23(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 23, 2022
     day = Day23()
 

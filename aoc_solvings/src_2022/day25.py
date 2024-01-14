@@ -142,7 +142,8 @@ class SNAFUNum:
         """Create a SNAFUNum from SNAFU string."""
         obj = cls()
         for char in string:
-            obj.add_digit(SNAFUCharacter(char), greater=False)
+            # SNAFUCharacter is an ENUM so it doesn't use __new__ call signature
+            obj.add_digit(SNAFUCharacter(char), greater=False)  # type: ignore[call-arg]
         return obj
 
     def add_digit(self, num: SNAFUCharacter, greater: bool = True) -> None:
@@ -194,7 +195,7 @@ class Day25(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 25, 2022
     day = Day25()
 

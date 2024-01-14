@@ -70,7 +70,7 @@ class GridLoc(NamedTuple):
         """Return negative version of point."""
         return GridLoc(-self.x_pos, -self.y_pos)
 
-    def __mul__(self, scalar: int) -> GridLoc:
+    def __mul__(self, scalar: int) -> GridLoc:  # type: ignore[override]
         """Treat somewhat like vector, able to be scaled by constants."""
         return GridLoc(self.x_pos * scalar, self.y_pos * scalar)
 
@@ -214,7 +214,8 @@ class Day24(Day):
         lines = puzzle_input.splitlines()
         grid = [line[1:-1] for line in lines[1:-1]]
         blizzs = [
-            Blizzard(GridLoc(x_ind, y_ind), BlizzardDir(char))
+            # BlizzardDir is an Enum, so this doesn't use __new__ call signature
+            Blizzard(GridLoc(x_ind, y_ind), BlizzardDir(char))  # type: ignore[call-arg]
             for y_ind, line in enumerate(grid)
             for x_ind, char in enumerate(line)
             if char not in (".", "#")
@@ -278,7 +279,7 @@ class Day24(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 24, 2022
     day = Day24()
     if args["--example"] or args["--verbose"]:

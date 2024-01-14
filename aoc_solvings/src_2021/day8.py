@@ -98,8 +98,8 @@ class Day8(Day):
         """Do part 2."""
 
         def strip(string: str, *stripping) -> str:
-            stripping = "".join(stripping)
-            return re.sub(f"[{stripping}]", "", string)
+            stripped_together = "".join(stripping)
+            return re.sub(f"[{stripped_together}]", "", string)
 
         solved_outputs: list[int] = []
         for note in data:

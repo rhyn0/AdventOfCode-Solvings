@@ -115,9 +115,9 @@ class Day14(Day):
     def parse(self, puzzle_input: str) -> tuple[str, PolymerRules]:
         """Return tuple of starting template and polymer rules."""
         start_templ, rules_list = puzzle_input.split("\n\n")
-        rules_list = rules_list.splitlines()
+        rules = rules_list.splitlines()
         ruleset = PolymerRules()
-        for rule in rules_list:
+        for rule in rules:
             ruleset.add_rule(PolymerRule(*(part.strip() for part in rule.split("->"))))
 
         return start_templ, ruleset
@@ -126,7 +126,7 @@ class Day14(Day):
     def _polymer_insert_round(
         pair_counts: dict[str, int], ltr_counts: Counter[str], rules: PolymerRules
     ) -> tuple[dict[str, int], Counter[str]]:
-        new_pairs = defaultdict(int)
+        new_pairs: defaultdict[str, int] = defaultdict(int)
         new_pairs.update(pair_counts)
         for rule in rules:
             primary_pair = rule.poly_pair
@@ -184,7 +184,7 @@ class Day14(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 14, 2021
     day = Day14()
     if args["--example"] or args["--verbose"]:

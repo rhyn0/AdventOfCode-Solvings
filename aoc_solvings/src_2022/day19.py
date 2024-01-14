@@ -220,7 +220,7 @@ class Satchel:
         que: deque[TimedQueueSearchItem] = deque(
             [(0, start_robots, start_resources, set())]
         )
-        best_for_time = defaultdict(int)
+        best_for_time: defaultdict[int, int] = defaultdict(int)
         LOG.info(
             "Maximum robot counts for each type in blueprint %d are %s",
             self.blueprint.bp_id,
@@ -313,7 +313,7 @@ class Day19(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 19, 2022
     day = Day19()
     if args["--example"] or args["--verbose"]:

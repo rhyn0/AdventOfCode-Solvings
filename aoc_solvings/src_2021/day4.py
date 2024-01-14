@@ -1,7 +1,6 @@
 # Standard Library
 from dataclasses import dataclass
 from dataclasses import field
-from typing import ClassVar
 
 # External Party
 from aocd import get_data
@@ -80,7 +79,10 @@ class BingoBoard:
 class Day4(Day):
     """Day 4 from Advent of Code 2021."""
 
-    puzzles: ClassVar[list[BingoBoard]] = []
+    def __init__(self) -> None:
+        """Add puzzles to object init."""
+        super().__init__()
+        self.puzzles: list[BingoBoard] = []
 
     def parse(self, puzzle_input: str) -> list[int]:
         """Parse data input."""

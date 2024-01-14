@@ -98,7 +98,7 @@ class GridLoc:
     def cardinal_neighbors(self) -> Iterable[GridLoc]:
         """Generate the neighbors to this location."""
         yield from [
-            (*self, delta_x, delta_y)
+            self + (delta_x, delta_y)  # noqa: RUF005
             for delta_x, delta_y in pairwise(self._neigh_direction)
         ]
 
@@ -248,7 +248,7 @@ class Day15(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 15, 2021
     day = Day15()
     if args["--example"] or args["--verbose"]:

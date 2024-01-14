@@ -36,7 +36,7 @@ class Day5(Day):
         lines = data_input.split("\n")
         split_point = lines.index("")
         num_stacks = int(lines[split_point - 1].split()[-1])
-        self.crates = [[] for _ in range(num_stacks)]
+        self.crates: list[list[str]] = [[] for _ in range(num_stacks)]
         for crate_num, stack in enumerate(
             re.finditer(r"\d", lines[split_point - 1], re.I)
         ):

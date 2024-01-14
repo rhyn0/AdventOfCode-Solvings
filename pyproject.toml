@@ -15,8 +15,9 @@ numpy = "^1.24.2"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.2.1"
-ruff = "^0.0.259"
+ruff = "^0.1.13"
 black = "^23.1.0"
+mypy = "^1.8.0"
 
 
 [tool.poetry.group.test.dependencies]
@@ -150,6 +151,20 @@ import_heading_thirdparty = "External Party"
 import_heading_firstparty = "My Modules"
 profile = "black"
 group_by_package = true
+
+[tool.mypy]
+python_version = "3.10"
+warn_unreachable = true
+warn_unused_ignores = true
+warn_unused_configs = true
+disable_error_code = "import-untyped"
+packages = "aoc_solvings"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "aoc_solvings.src_2021.day16"
+ignore_errors = true
+
 
 [build-system]
 requires = ["poetry-core"]
