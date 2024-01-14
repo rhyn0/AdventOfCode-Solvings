@@ -235,7 +235,7 @@ class Day17(Day):
         Returns:
             int
         """
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         num_rocks = 1_000_000_000_000
         sample = 10_000
         system = NotTetris(data)

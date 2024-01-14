@@ -179,7 +179,7 @@ class Day13(Day):
         Returns:
             int
         """
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         LOG.debug("input is %r", data)
         index_sum = 0
         for index, (first, second) in enumerate(
@@ -205,7 +205,7 @@ class Day13(Day):
             int
         """
         dividers = [[[2]], [[6]]]
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         local_data = [json.loads(line) for line in data] + dividers
         LOG.debug("unsorted data is %s", "\n".join(str(line) for line in local_data))
         local_data.sort(key=cmp_to_key(self._valid_packet))

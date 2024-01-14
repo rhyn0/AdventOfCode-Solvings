@@ -235,7 +235,6 @@ class BITSPacketParser:
                 )
                 # TODO - OpBITS sum_version?
                 sub_vers_sum, new_pkts = cls.parse_packets(bin_string[index:])
-                new_pkt.s
                 vers += sub_vers_sum
                 pkts.append(new_pkt)
                 index += pkt_len
@@ -254,14 +253,14 @@ class Day16(Day):
 
     def part1(self, data: str) -> int:
         """Return sum of the packet versions for all packets in data."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         total_vers, pkts = BITSPacketParser.parse_packets(data)
         LOG.info("Created %d packets which are %s", len(pkts), pkts)
         return total_vers
 
     def part2(self, data: list[list[int]]) -> int:
         """Return count of max element minus count of min element after insertions."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
 
 
 if __name__ == "__main__":

@@ -331,7 +331,7 @@ class GroveCube(GroveGrid):
     _cube_len: int
     _transform_d: dict[tuple[Facing, GridLoc], tuple[Facing, LinTransform]]
 
-    def _init_edges(self) -> tuple[int, int]:  # noqa: PLR0915
+    def _init_edges(self) -> tuple[int, int]:  # noqa: PLR0915, C901
         """Override for new logic Cube form."""
         points = sum(len(line.strip()) for line in self.grid)
         self._cube_len = edge_len = int(sqrt(points // 6))
@@ -540,13 +540,13 @@ class Day22(Day):
 
     def part1(self, data: tuple[list[str], str]) -> int:
         """Return value for the password that Grid wants."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         gg = GroveGrid(data[0])
         return self._execute_steps(gg, data[1])
 
     def part2(self, data: tuple[list[str], str]) -> int:
         """Return value for the password that Cube wants."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         # grid is a hardcoded 15,000 tiles 6 - 50x50 faces
         gc = GroveCube(data[0])
         LOG.info("Starting with position of %s", gc.pos)

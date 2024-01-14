@@ -250,7 +250,7 @@ class Day23(Day):
         Simulates 10 rounds then finds the amount of space.
         The rectangle must contain all elves but limit free space.
         """
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         end_locations = self._handle_elf_rounds(data, rounds=10)
         LOG.info("Received final locations of %s", end_locations[:5])
         bounds = self.grid_bounds(end_locations)
@@ -260,7 +260,7 @@ class Day23(Day):
 
     def part2(self, data: list[GridLoc]) -> int:
         """Return round number that the Elves stop moving."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         elves = [Elf(loc) for loc in data]
         search_seq = deque([SEARCH_NORTH, SEARCH_SOUTH, SEARCH_WEST, SEARCH_EAST])
         # cls.dump(elves)

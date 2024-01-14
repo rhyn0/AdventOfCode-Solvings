@@ -126,12 +126,12 @@ class Day12(Day):
 
     def part1(self, data: dict[str, set[str]]) -> int:
         """Return number of distinct paths from 'start' to 'end'."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         return self.traverse_paths(data)
 
     def part2(self, data: dict[str, set[str]]) -> int:
         """Return value for the password that Cube wants."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         return self.traverse_paths(data, small_limit=2)
 
 

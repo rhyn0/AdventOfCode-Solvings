@@ -185,7 +185,7 @@ class Day13(Day):
 
     def part1(self, data: tuple[set[GridLoc], list[Fold]]) -> int:
         """Return number of dots visible after doing one fold."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         new_dots = self._compute_fold(data[0], data[1][0])
         LOG.debug(
             "Got new dots of %s",
@@ -210,7 +210,7 @@ class Day13(Day):
 
     def part2(self, data: tuple[set[GridLoc], list[Fold]]) -> None:
         """Print code onto stdout for human to read."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         dots, folds = data
         for fold in folds:
             dots = self._compute_fold(dots, fold)

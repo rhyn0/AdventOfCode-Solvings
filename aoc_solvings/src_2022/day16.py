@@ -163,7 +163,7 @@ class Day16(Day):
         Returns:
             int
         """
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         vs = ValveSystem({valve.name: valve for valve in data}, time_budget=30)
         valve_flow_rates = vs.dfs("AA")
         LOG.debug("After visiting all spots, got state values of %s", valve_flow_rates)
@@ -178,7 +178,7 @@ class Day16(Day):
         Returns:
             int
         """
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         vs = ValveSystem({valve.name: valve for valve in data}, time_budget=26)
         valve_flow_rates = vs.dfs("AA")
         LOG.debug("After visiting all spots, got state values of %s", valve_flow_rates)

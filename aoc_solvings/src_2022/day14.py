@@ -264,13 +264,13 @@ class Day14(Day):
 
     def part1(self, data: SandCave) -> int:
         """Return amount of sand needed until one falls into the abyss."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         data.reset_grid()
         return data.count_sand()
 
     def part2(self, data: SandCave) -> int:
         """Return amount of sand at which point no more sand can flow."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         data.reset_grid()
         return data.count_sand(floor=True)
 

@@ -290,7 +290,7 @@ class Day19(Day):
 
     def part1(self, data: list[FactoryBlueprint]) -> int:
         """Return sum of quality scores of geodes for all blueprints."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         satch = Satchel(24)
         total = 0
         for bp in data:
@@ -305,7 +305,7 @@ class Day19(Day):
 
     def part2(self, data: list[FactoryBlueprint]) -> int:
         """With only first 3 blueprints, return product of geodes mined."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         satch = Satchel(32)
         LOG.info("The first 3 blueprints are %s", data[:3])
         return prod(satch.blueprint_score(bp) for bp in data[:3])

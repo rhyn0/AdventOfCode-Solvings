@@ -217,7 +217,7 @@ class Day24(Day):
             Blizzard(GridLoc(x_ind, y_ind), BlizzardDir(char))
             for y_ind, line in enumerate(grid)
             for x_ind, char in enumerate(line)
-            if char != "." and char != "#"
+            if char not in (".", "#")
         ]
         # minus two because last entry is a wall
         x_max, y_max = len(grid[0]), len(grid)
@@ -261,12 +261,12 @@ class Day24(Day):
 
     def part1(self, data: tuple[GridLoc, IceValley]):
         """Return number of minutes to go from start to finish."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         return self._simple_cell_auto(data)
 
     def part2(self, data: tuple[GridLoc, IceValley]) -> int:
         """Return number of minutes to go start to finish, back and forth."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         orig_start, iv = data
         orig_goal = iv.goal
         step1 = self._simple_cell_auto(data)

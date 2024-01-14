@@ -88,7 +88,7 @@ class Day18(Day):
 
     def part1(self, data: set[LavaPoint]) -> int:
         """Return number of exposed faces on lava."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
 
         return sum(
             1
@@ -109,7 +109,7 @@ class Day18(Day):
         Returns:
             int
         """
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
 
         min_range = min(min(pt) for pt in data) - 1
         max_range = max(max(pt) for pt in data) + 2

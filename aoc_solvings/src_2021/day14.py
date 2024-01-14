@@ -171,13 +171,13 @@ class Day14(Day):
 
     def part1(self, data: tuple[str, PolymerRules]) -> int:
         """Return count of max element minus count of min element after insertions."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         counts = self.handle_polymer_rounds(*data)
         return counts.most_common()[0][1] - counts.most_common()[-1][1]
 
     def part2(self, data: tuple[str, PolymerRules]) -> int:
         """Return count of max element minus count of min element after insertions."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         counts = self.handle_polymer_rounds(*data, rounds=40)
         return counts.most_common()[0][1] - counts.most_common()[-1][1]
 
