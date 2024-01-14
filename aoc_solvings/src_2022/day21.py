@@ -166,13 +166,13 @@ class Monkey:
         left, right = self.monkey_sources
         if left.find_human():
             humn_branch = left
-            remain = self.REV_OPERS[self.oper](root_val, right.get_value())  # type: ignore  # noqa: E501
+            remain = self.REV_OPERS[self.oper](root_val, right.get_value())  # type: ignore
         elif self.oper in (sub, floordiv):
             humn_branch = right
             remain = self.oper(left.get_value(), root_val)  # type: ignore
         else:
             humn_branch = right
-            remain = self.REV_OPERS[self.oper](root_val, left.get_value())  # type: ignore  # noqa: E501
+            remain = self.REV_OPERS[self.oper](root_val, left.get_value())  # type: ignore
 
         LOG.debug(
             "From %r, human branch should be %r and sanity check %r",

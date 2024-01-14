@@ -125,7 +125,7 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 target-version = "py310"
 
 # Error output type
-format = "text"
+output-format = "text"
 
 [tool.ruff.mccabe]
 # Unlike Flake8, default to a complexity level of 10.
