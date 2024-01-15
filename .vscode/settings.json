@@ -14,4 +14,14 @@
         "--config-file=pyproject.toml"
     ],
     "mypy-type-checker.preferDaemon": false,
+    "files.exclude": {
+        "**/.git": false,
+        "**/.svn": false,
+        "**/.hg": false,
+        "**/CVS": false,
+        "**/.DS_Store": false,
+        "**/Thumbs.db": false,
+        "**/.mypy_cache": false,
+        "**/target": false
+    },
 }
