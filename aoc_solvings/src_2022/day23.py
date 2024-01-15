@@ -212,8 +212,10 @@ class Day23(Day):
         Returns:
             tuple[int, int, int, int]: x_min, y_min, x_max, y_max
         """
-        h_min, h_max = float("inf"), 0
-        w_min, w_max = float("inf"), 0
+        h_min: float | int = float("inf")
+        h_max = 0
+        w_min: float | int = float("inf")
+        w_max = 0
         for point in points:
             h_min = min(h_min, point.y_pos)
             h_max = max(h_max, point.y_pos)
@@ -250,7 +252,7 @@ class Day23(Day):
         Simulates 10 rounds then finds the amount of space.
         The rectangle must contain all elves but limit free space.
         """
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         end_locations = self._handle_elf_rounds(data, rounds=10)
         LOG.info("Received final locations of %s", end_locations[:5])
         bounds = self.grid_bounds(end_locations)
@@ -260,7 +262,7 @@ class Day23(Day):
 
     def part2(self, data: list[GridLoc]) -> int:
         """Return round number that the Elves stop moving."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         elves = [Elf(loc) for loc in data]
         search_seq = deque([SEARCH_NORTH, SEARCH_SOUTH, SEARCH_WEST, SEARCH_EAST])
         # cls.dump(elves)
@@ -288,7 +290,7 @@ class Day23(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 23, 2022
     day = Day23()
 

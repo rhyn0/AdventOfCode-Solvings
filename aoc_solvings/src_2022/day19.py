@@ -220,7 +220,7 @@ class Satchel:
         que: deque[TimedQueueSearchItem] = deque(
             [(0, start_robots, start_resources, set())]
         )
-        best_for_time = defaultdict(int)
+        best_for_time: defaultdict[int, int] = defaultdict(int)
         LOG.info(
             "Maximum robot counts for each type in blueprint %d are %s",
             self.blueprint.bp_id,
@@ -290,7 +290,7 @@ class Day19(Day):
 
     def part1(self, data: list[FactoryBlueprint]) -> int:
         """Return sum of quality scores of geodes for all blueprints."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         satch = Satchel(24)
         total = 0
         for bp in data:
@@ -305,7 +305,7 @@ class Day19(Day):
 
     def part2(self, data: list[FactoryBlueprint]) -> int:
         """With only first 3 blueprints, return product of geodes mined."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         satch = Satchel(32)
         LOG.info("The first 3 blueprints are %s", data[:3])
         return prod(satch.blueprint_score(bp) for bp in data[:3])
@@ -313,7 +313,7 @@ class Day19(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 19, 2022
     day = Day19()
     if args["--example"] or args["--verbose"]:

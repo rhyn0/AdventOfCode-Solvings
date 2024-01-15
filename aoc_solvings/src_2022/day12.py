@@ -120,7 +120,8 @@ class Day12(Day):
         self, data_grid: list[list[int]], start: TwoDimPoint, end: TwoDimPoint
     ) -> int:
         que: deque[tuple[TwoDimPoint, int]] = deque([(start, 0)])
-        short_path_len, visited = float("inf"), {}
+        short_path_len: float | int = float("inf")
+        visited: dict[TwoDimPoint, int] = {}
         while que:
             LOG.debug("queue after visiting %d spots - %s", len(visited), que)
             curr_loc, steps = que.popleft()
@@ -168,7 +169,7 @@ class Day12(Day):
             int
         """
         grid, _, end_loc = data
-        scenic_hike_dist = float("inf")
+        scenic_hike_dist: int | float = float("inf")
         for row, line in enumerate(grid):
             for col, val in enumerate(line):
                 if val == 0:
@@ -183,7 +184,7 @@ class Day12(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 12, 2022
     day = Day12()
     if args["--example"] or args["--verbose"]:

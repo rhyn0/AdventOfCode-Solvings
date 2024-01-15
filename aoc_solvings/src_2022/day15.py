@@ -225,7 +225,8 @@ class Day15(Day):
         """Return sensor, beacon pairs."""
         pttrn = re.compile(r"x=(-?\d+),\sy=(-?\d+)", re.I)
         return [
-            tuple(Point(*map(int, x)) for x in pttrn.findall(line))
+            # this findall will always return 2 items
+            tuple(Point(*map(int, x)) for x in pttrn.findall(line))  # type: ignore[misc]
             for line in puzzle_input.splitlines()
         ]
 
@@ -235,7 +236,7 @@ class Day15(Day):
 
     def part1(self, data: list[tuple[Point, Point]]) -> int:
         """Return number of known non-sensor points in target column."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         grid = Grid(data)
         LOG.info(
             "Generated %d Manhattan distances with left and right bounds of %d, %d.",
@@ -253,7 +254,7 @@ class Day15(Day):
 
     def part2(self, data: list[tuple[Point, Point]]) -> int:
         """Return tuning frequency of sensor gap spot."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         grid = Grid(data)
         pt = grid.check_sensors_perimeters(max(self._max_col, self._max_depth))
 
@@ -262,7 +263,7 @@ class Day15(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 15, 2022
     day = Day15()
     if args["--example"] or args["--verbose"]:

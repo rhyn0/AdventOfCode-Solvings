@@ -70,7 +70,7 @@ class GridLoc(NamedTuple):
         """Return negative version of point."""
         return GridLoc(-self.x_pos, -self.y_pos)
 
-    def __mul__(self, scalar: int) -> GridLoc:
+    def __mul__(self, scalar: int) -> GridLoc:  # type: ignore[override]
         """Treat somewhat like vector, able to be scaled by constants."""
         return GridLoc(self.x_pos * scalar, self.y_pos * scalar)
 
@@ -214,10 +214,11 @@ class Day24(Day):
         lines = puzzle_input.splitlines()
         grid = [line[1:-1] for line in lines[1:-1]]
         blizzs = [
-            Blizzard(GridLoc(x_ind, y_ind), BlizzardDir(char))
+            # BlizzardDir is an Enum, so this doesn't use __new__ call signature
+            Blizzard(GridLoc(x_ind, y_ind), BlizzardDir(char))  # type: ignore[call-arg]
             for y_ind, line in enumerate(grid)
             for x_ind, char in enumerate(line)
-            if char != "." and char != "#"
+            if char not in (".", "#")
         ]
         # minus two because last entry is a wall
         x_max, y_max = len(grid[0]), len(grid)
@@ -261,12 +262,12 @@ class Day24(Day):
 
     def part1(self, data: tuple[GridLoc, IceValley]):
         """Return number of minutes to go from start to finish."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         return self._simple_cell_auto(data)
 
     def part2(self, data: tuple[GridLoc, IceValley]) -> int:
         """Return number of minutes to go start to finish, back and forth."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         orig_start, iv = data
         orig_goal = iv.goal
         step1 = self._simple_cell_auto(data)
@@ -278,7 +279,7 @@ class Day24(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 24, 2022
     day = Day24()
     if args["--example"] or args["--verbose"]:

@@ -88,8 +88,8 @@ class Day7(Day):
 
     def compute_filesystem(self, data_in: list[str]) -> dict[str, int]:
         """Return directory sizes for the discovered file system."""
-        paths = defaultdict(int)
-        curr_path = []
+        paths: defaultdict[str, int] = defaultdict(int)
+        curr_path: list[str] = []
         for line in data_in:
             words = line.strip().split(" ")
             if words[1] == "cd":
@@ -140,7 +140,7 @@ class Day7(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 7, 2022
     day = Day7()
     if args["--example"] or args["--verbose"]:

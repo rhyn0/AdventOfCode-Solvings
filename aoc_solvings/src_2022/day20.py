@@ -21,6 +21,7 @@ from pathlib import Path
 import sys
 from textwrap import dedent
 from typing import TYPE_CHECKING
+from typing import ClassVar
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -57,7 +58,7 @@ EXAMPLE = dedent(
 class Day20(Day):
     """Day 20 of Advent of Code 2022."""
 
-    GROVE_INDICES = [1000, 2000, 3000]
+    GROVE_INDICES: ClassVar = [1000, 2000, 3000]
 
     def parse(self, puzzle_input: str) -> list[str]:
         """Return numbers in original order."""
@@ -142,7 +143,7 @@ class Day20(Day):
         Returns:
             int: Sum of the grove indices of the now mixed list.
         """
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         nums = self.mix_coords(data.copy())
         num_len = len(nums)
         zero_spot = nums.index("0")
@@ -169,7 +170,7 @@ class Day20(Day):
         Returns:
             int
         """
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         nums = self.mix_coords(data.copy(), mix_times=10, multiplier=811589153)
         num_len = len(nums)
         zero_spot = nums.index("0")
@@ -188,7 +189,7 @@ class Day20(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 20, 2022
     day = Day20()
     if args["--example"] or args["--verbose"]:

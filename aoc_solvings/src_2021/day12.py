@@ -15,7 +15,6 @@ from __future__ import annotations
 from collections import defaultdict
 from collections import deque
 import logging
-import os
 from pathlib import Path
 import sys
 from textwrap import dedent
@@ -25,13 +24,8 @@ from aocd import get_data
 from aocd import submit
 from docopt import docopt
 
-try:
-    # My Modules
-    from common.template import Day
-except ImportError:
-    sys.path.insert(0, os.path.dirname(sys.path[0]))
-    # My Modules
-    from common.template import Day
+# My Modules
+from aoc_solvings.common.template import Day
 
 LOG_NAME = "day12"
 LOG = logging.getLogger(LOG_NAME)
@@ -126,18 +120,18 @@ class Day12(Day):
 
     def part1(self, data: dict[str, set[str]]) -> int:
         """Return number of distinct paths from 'start' to 'end'."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         return self.traverse_paths(data)
 
     def part2(self, data: dict[str, set[str]]) -> int:
         """Return value for the password that Cube wants."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         return self.traverse_paths(data, small_limit=2)
 
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 12, 2021
     day = Day12()
 

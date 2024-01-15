@@ -83,7 +83,7 @@ class Facing(IntEnum):
     LEFT = 2
     UP = 3
 
-    def __radd__(self, point: Any) -> GridLoc:
+    def __radd__(self, point: Any) -> GridLoc:  # type: ignore[override]
         """Return new GridLoc when adding to a GridLoc."""
         if not isinstance(point, GridLoc):
             return NotImplemented
@@ -129,8 +129,10 @@ class GridLoc(NamedTuple):
         """Negate both x, y values."""
         return GridLoc(-self.x_posn, -self.y_posn)
 
-    def __mul__(self, scalar: int) -> GridLoc:
+    def __mul__(self, scalar: int | tuple) -> GridLoc:  # type: ignore[override]
         """Multiply by a scalar."""
+        if isinstance(scalar, tuple):
+            return GridLoc(self.x_posn * scalar[0], self.y_posn * scalar[1])
         return GridLoc(self.x_posn * scalar, self.y_posn * scalar)
 
 
@@ -169,7 +171,7 @@ class GroveGrid:
 
     def new_pos(self) -> tuple[int, int]:
         """Worthless."""
-        return tuple(GridLoc(*self.pos) + self.facing)
+        return tuple(GridLoc(*self.pos) + self.facing)  # type: ignore[return-value]
 
     def do_move(self) -> tuple[GridLoc, Facing] | None:
         """Return next point if possible to move to that point."""
@@ -241,17 +243,16 @@ class LinTransform(NamedTuple):
 
     def __matmul__(self, rhs: LinTransform) -> LinTransform:
         """Matrix multiplication between two matrices."""
-        if not isinstance(rhs, LinTransform):
-            return NotImplemented
         cols = list(zip(*rhs, strict=True))
+        # cols is always 3 x 3, so this __init__ always passes the 3 values
         return type(self)(
-            tuple(
+            tuple(  # type: ignore[arg-type]
                 sum(x * c for x, c in zip(self.xs, col, strict=True)) for col in cols
             ),
-            tuple(
+            tuple(  # type: ignore[arg-type]
                 sum(y * c for y, c in zip(self.ys, col, strict=True)) for col in cols
             ),
-            tuple(
+            tuple(  # type: ignore[arg-type]
                 sum(z * c for z, c in zip(self.consts, col, strict=True))
                 for col in cols
             ),
@@ -259,9 +260,6 @@ class LinTransform(NamedTuple):
 
     def __rmatmul__(self, other: GridLoc) -> GridLoc:
         """Return new location when used against a GridLoc."""
-        if not isinstance(other, GridLoc):
-            return NotImplemented
-
         vector = (*other, 1)
         # all because I do location by row, col not x, y
         LOG.debug("Doing right matmul with %s and %r", other, self)
@@ -331,7 +329,7 @@ class GroveCube(GroveGrid):
     _cube_len: int
     _transform_d: dict[tuple[Facing, GridLoc], tuple[Facing, LinTransform]]
 
-    def _init_edges(self) -> tuple[int, int]:  # noqa: PLR0915
+    def _init_edges(self) -> GridLoc:  # noqa: PLR0915, C901
         """Override for new logic Cube form."""
         points = sum(len(line.strip()) for line in self.grid)
         self._cube_len = edge_len = int(sqrt(points // 6))
@@ -407,7 +405,11 @@ class GroveCube(GroveGrid):
         LOG.debug("Faces begin dict %s", edge_positions_face)
         # for each disconnected edge, have to move position to
         # appropriate location on new face
-        self._transform_d = td = {}
+        self._transform_d: dict[
+            tuple[Facing, GridLoc], tuple[Facing, LinTransform]
+        ] = {}
+        # rename for ease of use
+        td = self._transform_d
         for face, discon in discon_edges.items():
             LOG.debug("Face %d has disconnected edges of %s", face, discon)
             for edge in discon:
@@ -454,14 +456,22 @@ class GroveCube(GroveGrid):
                 trans = LinTransform.make_transform(*discon_corner) @ trans
                 match main_leave_dir:
                     case Facing.RIGHT:
-                        points = (main_corner + GridLoc(0, y) for y in range(edge_len))
+                        points_gen = (
+                            main_corner + GridLoc(0, y) for y in range(edge_len)
+                        )
                     case Facing.DOWN:
-                        points = (main_corner + GridLoc(-x, 0) for x in range(edge_len))
+                        points_gen = (
+                            main_corner + GridLoc(-x, 0) for x in range(edge_len)
+                        )
                     case Facing.LEFT:
-                        points = (main_corner + GridLoc(0, -y) for y in range(edge_len))
+                        points_gen = (
+                            main_corner + GridLoc(0, -y) for y in range(edge_len)
+                        )
                     case Facing.UP:
-                        points = (main_corner + GridLoc(x, 0) for x in range(edge_len))
-                for point in points:
+                        points_gen = (
+                            main_corner + GridLoc(x, 0) for x in range(edge_len)
+                        )
+                for point in points_gen:
                     td[main_leave_dir, point] = (~discon_leave_dir, trans)
                     LOG.debug(
                         "Added (%s, %s) to the transform dict", main_leave_dir, point
@@ -540,13 +550,13 @@ class Day22(Day):
 
     def part1(self, data: tuple[list[str], str]) -> int:
         """Return value for the password that Grid wants."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         gg = GroveGrid(data[0])
         return self._execute_steps(gg, data[1])
 
     def part2(self, data: tuple[list[str], str]) -> int:
         """Return value for the password that Cube wants."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         # grid is a hardcoded 15,000 tiles 6 - 50x50 faces
         gc = GroveCube(data[0])
         LOG.info("Starting with position of %s", gc.pos)
@@ -556,7 +566,7 @@ class Day22(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 22, 2022
     day = Day22()
     if args["--example"] or args["--verbose"]:

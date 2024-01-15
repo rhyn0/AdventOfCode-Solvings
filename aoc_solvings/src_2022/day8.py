@@ -81,13 +81,13 @@ class Day8(Day):
         tree_visible = set()
 
         for row_no in range(n):
-            if row_no == 0 or row_no == n - 1:
+            if row_no in (0, n - 1):
                 tree_visible.update({(row_no, col) for col in range(m)})
             else:
                 tree_visible.update(self._traverse_r(row_no, data))
 
         for col_no in range(m):
-            if col_no == 0 or col_no == m - 1:
+            if col_no in (0, m - 1):
                 tree_visible.update({(row, col_no) for row in range(n)})
             else:
                 tree_visible.update(self._traverse_c(col_no, data))

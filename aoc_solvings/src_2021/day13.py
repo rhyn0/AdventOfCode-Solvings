@@ -14,7 +14,6 @@ from __future__ import annotations
 # Standard Library
 from dataclasses import dataclass
 import logging
-import os
 from pathlib import Path
 import sys
 from textwrap import dedent
@@ -25,13 +24,8 @@ from aocd import get_data
 from aocd import submit
 from docopt import docopt
 
-try:
-    # My Modules
-    from common.template import Day
-except ImportError:
-    sys.path.insert(0, os.path.dirname(sys.path[0]))
-    # My Modules
-    from common.template import Day
+# My Modules
+from aoc_solvings.common.template import Day
 
 LOG_NAME = "day13"
 LOG = logging.getLogger(LOG_NAME)
@@ -172,8 +166,8 @@ class Day13(Day):
         """Return tuple of dots and fold locations."""
         dots, folds = (section.splitlines() for section in puzzle_input.split("\n\n"))
         locs = {GridLoc(*(int(part) for part in dot.split(","))) for dot in dots}
-        folds = [Fold(fold) for fold in folds]
-        return locs, folds
+        fold_list = [Fold(fold) for fold in folds]
+        return locs, fold_list
 
     @staticmethod
     def _compute_fold(dots: set[GridLoc], curr_fold: Fold) -> set[GridLoc]:
@@ -185,7 +179,7 @@ class Day13(Day):
 
     def part1(self, data: tuple[set[GridLoc], list[Fold]]) -> int:
         """Return number of dots visible after doing one fold."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         new_dots = self._compute_fold(data[0], data[1][0])
         LOG.debug(
             "Got new dots of %s",
@@ -210,7 +204,7 @@ class Day13(Day):
 
     def part2(self, data: tuple[set[GridLoc], list[Fold]]) -> None:
         """Print code onto stdout for human to read."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         dots, folds = data
         for fold in folds:
             dots = self._compute_fold(dots, fold)
@@ -220,7 +214,7 @@ class Day13(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 13, 2021
     day = Day13()
 

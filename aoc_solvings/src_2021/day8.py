@@ -1,6 +1,7 @@
 # Standard Library
 from collections import namedtuple
 import re
+from typing import ClassVar
 from typing import NamedTuple
 
 # External Party
@@ -67,7 +68,7 @@ class Day8(Day):
     #     5 -> 2, 3, 5
     #     6 -> 0, 6, 9
 
-    num_to_seg = {
+    num_to_seg: ClassVar = {
         "0": [0, 1, 2, 4, 5, 6],
         "1": [2, 5],
         "2": [0, 2, 3, 4, 6],
@@ -97,8 +98,8 @@ class Day8(Day):
         """Do part 2."""
 
         def strip(string: str, *stripping) -> str:
-            stripping = "".join(stripping)
-            return re.sub(f"[{stripping}]", "", string)
+            stripped_together = "".join(stripping)
+            return re.sub(f"[{stripped_together}]", "", string)
 
         solved_outputs: list[int] = []
         for note in data:

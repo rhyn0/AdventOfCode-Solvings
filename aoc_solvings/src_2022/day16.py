@@ -69,11 +69,10 @@ class ValveSystem:
         self.flow_pipes = {
             name: valve for name, valve in pipes.items() if valve.flow_rate
         }
-        self.open_pipes = set()
         self.minutes = time_budget
         self.curr_valve = "AA"
         self.steps = self._compute_steps()
-        self.valve_history = defaultdict(int)
+        self.valve_history: defaultdict[int, int] = defaultdict(int)
         self.states = {x: 1 << i for i, x in enumerate(self.flow_pipes)}
 
     def _compute_steps(self) -> dict[str, dict[str, float]]:
@@ -163,7 +162,7 @@ class Day16(Day):
         Returns:
             int
         """
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         vs = ValveSystem({valve.name: valve for valve in data}, time_budget=30)
         valve_flow_rates = vs.dfs("AA")
         LOG.debug("After visiting all spots, got state values of %s", valve_flow_rates)
@@ -178,7 +177,7 @@ class Day16(Day):
         Returns:
             int
         """
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         vs = ValveSystem({valve.name: valve for valve in data}, time_budget=26)
         valve_flow_rates = vs.dfs("AA")
         LOG.debug("After visiting all spots, got state values of %s", valve_flow_rates)
@@ -191,7 +190,7 @@ class Day16(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 16, 2022
     day = Day16()
     if args["--example"]:

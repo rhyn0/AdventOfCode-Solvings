@@ -8,5 +8,10 @@
     },
     "rust-analyzer.showUnlinkedFileNotification": false,
     "rust-analyzer.inlayHints.chainingHints.enable": true,
-    "editor.inlayHints.fontFamily": "Monaspace Krypton"
+    "editor.inlayHints.fontFamily": "Monaspace Krypton",
+    "ruff.enable": true,
+    "mypy-type-checker.args": [
+        "--config-file=pyproject.toml"
+    ],
+    "mypy-type-checker.preferDaemon": false,
 }

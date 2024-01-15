@@ -151,13 +151,13 @@ class Day13(Day):
             LOG.debug(
                 "Comparing parts of packet that is left: %r and right: %r", item1, item2
             )
-            if sentinel in (item1, item2):  # readability
+            if sentinel is item1 or sentinel is item2:
                 LOG.debug("Given item %r, %r, one subpacket is too short", item1, item2)
                 return -1 if item1 is sentinel else 1
             if isinstance(item1, int) and isinstance(item2, int) and item1 != item2:
                 return item1 - item2
             if (isinstance(item1, list) or isinstance(item2, list)) and (
-                result := self.recurse_subpacket(item1, item2)
+                result := self.recurse_subpacket(item1, item2)  # type: ignore[arg-type]
             ) != 0:
                 # mismatch type or lists
                 return result
@@ -179,7 +179,7 @@ class Day13(Day):
         Returns:
             int
         """
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         LOG.debug("input is %r", data)
         index_sum = 0
         for index, (first, second) in enumerate(
@@ -205,7 +205,7 @@ class Day13(Day):
             int
         """
         dividers = [[[2]], [[6]]]
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         local_data = [json.loads(line) for line in data] + dividers
         LOG.debug("unsorted data is %s", "\n".join(str(line) for line in local_data))
         local_data.sort(key=cmp_to_key(self._valid_packet))
@@ -215,7 +215,7 @@ class Day13(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 13, 2022
     day = Day13()
     if args["--example"] or args["--verbose"]:

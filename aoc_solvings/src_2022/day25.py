@@ -142,7 +142,8 @@ class SNAFUNum:
         """Create a SNAFUNum from SNAFU string."""
         obj = cls()
         for char in string:
-            obj.add_digit(SNAFUCharacter(char), greater=False)
+            # SNAFUCharacter is an ENUM so it doesn't use __new__ call signature
+            obj.add_digit(SNAFUCharacter(char), greater=False)  # type: ignore[call-arg]
         return obj
 
     def add_digit(self, num: SNAFUCharacter, greater: bool = True) -> None:
@@ -179,7 +180,7 @@ class Day25(Day):
 
     def part1(self, data: list[SNAFUNum]) -> str:
         """Return SNAFUNum string of the sum of all fuel amounts."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         fuel_sum = sum(num.to_decimal() for num in data)
         new_num = SNAFUNum.from_decimal(fuel_sum)
         LOG.info(
@@ -194,7 +195,7 @@ class Day25(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 25, 2022
     day = Day25()
 

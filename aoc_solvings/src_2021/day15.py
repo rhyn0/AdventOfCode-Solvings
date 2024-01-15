@@ -98,7 +98,7 @@ class GridLoc:
     def cardinal_neighbors(self) -> Iterable[GridLoc]:
         """Generate the neighbors to this location."""
         yield from [
-            (*self, delta_x, delta_y)
+            self + (delta_x, delta_y)  # noqa: RUF005
             for delta_x, delta_y in pairwise(self._neigh_direction)
         ]
 
@@ -223,7 +223,7 @@ class Day15(Day):
 
     def part1(self, data: list[list[int]]) -> int:
         """Return count of max element minus count of min element after insertions."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         start, end = GridLoc(0, 0), GridLoc(len(data[0]) - 1, len(data) - 1)
 
         asq = AStarQueue(data)
@@ -231,7 +231,7 @@ class Day15(Day):
 
     def part2(self, data: list[list[int]]) -> int:
         """Return count of max element minus count of min element after insertions."""
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         new_grid = [
             [
                 self._increase_risk(val, row_tile + col_tile)
@@ -248,7 +248,7 @@ class Day15(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 15, 2021
     day = Day15()
     if args["--example"] or args["--verbose"]:

@@ -17,7 +17,6 @@ from __future__ import annotations
 from collections import Counter
 from itertools import chain
 import logging
-import os
 from pathlib import Path
 import sys
 from textwrap import dedent
@@ -34,13 +33,8 @@ from aocd import get_data
 from aocd import submit
 from docopt import docopt
 
-try:
-    # My Modules
-    from aoc_solvings.common.template import Day
-except ImportError:
-    sys.path.insert(0, os.path.dirname(sys.path[0]))
-    # My Modules
-    from common.template import Day
+# My Modules
+from aoc_solvings.common.template import Day
 
 LOG_NAME = "day5"
 LOG = logging.getLogger(LOG_NAME)
@@ -130,11 +124,11 @@ class Line:
                 for i in range(sta, sto):
                     yield Point(self.ends[1].x + i, self.ends[1].y)
             case (0, y):
-                sta, sto = (0, y + 1) if y > 0 else (y, 1)
+                sta, sto = (0, y + 1) if y > 0 else (y, 1)  # type: ignore[unreachable]
                 for i in range(sta, sto):
                     yield Point(self.ends[1].x, self.ends[1].y + i)
             case (x, y):
-                sta, sto = (0, x + 1) if x > 0 else (x, 1)
+                sta, sto = (0, x + 1) if x > 0 else (x, 1)  # type: ignore[unreachable]
                 for i in range(sta, sto):
                     yield Point(self.ends[1].x + i, self.ends[1].y + (y // x) * i)
 
@@ -186,7 +180,7 @@ class Day5(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 5, 2021
     day = Day5()
     if args["--example"] or args["--verbose"]:

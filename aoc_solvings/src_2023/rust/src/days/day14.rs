@@ -44,7 +44,7 @@ impl FromStr for Problem {
             })
             .collect();
 
-        Ok(Problem {
+        Ok(Self {
             grid: StonePulleyGrid {
                 num_rows,
                 num_cols,
@@ -92,7 +92,7 @@ impl fmt::Display for StonePulleyGrid {
             "{}",
             self.stones
                 .iter()
-                .map(|row| { row.iter().map(|stone| stone.to_string()).join("") })
+                .map(|row| { row.iter().map(std::string::ToString::to_string).join("") })
                 .join("\n")
         )
     }
@@ -101,9 +101,9 @@ impl fmt::Display for StonePulleyGrid {
 impl StonePulleyGrid {
     /// Return the load score of the current board state
     ///
-    /// Score is based on StoneType::Round pieces being farther from the bottom
-    /// Each StoneType::Round gets 1 point for each row away it is from the "off board" last row
-    /// The score total is the sum of points of all StoneType::Round
+    /// Score is based on `StoneType::Round` pieces being farther from the bottom
+    /// Each `StoneType::Round` gets 1 point for each row away it is from the "off board" last row
+    /// The score total is the sum of points of all `StoneType::Round`
     ///
     /// E.g. A Round rock on row 0 in a 4x4 grid would be worth 4 points. Since it is on 0 (inclusive), and there are 3 rows of board between it and bottom edge
     fn score_board(&self) -> u32 {
@@ -126,7 +126,7 @@ impl StonePulleyGrid {
         let mut board = self.stones.clone();
         for row_offset in 1..self.num_rows {
             // offset means how many rows to skip from the bottom
-            for row_idx in 1..(self.num_rows - row_offset + 1) {
+            for row_idx in 1..=(self.num_rows - row_offset) {
                 // for each row, check each stone
                 for col in 0..self.num_cols {
                     // look in the row below the current row, to see if we can move a stone from next to here
@@ -184,7 +184,7 @@ impl StonePulleyGrid {
                 })
             })
             .filter(|&(stone, _)| *stone == StoneType::Round)
-            .map(|(_, position)| position.clone().to_string())
+            .map(|(_, position)| position.to_string())
             .join("|")
     }
     /// Move the board to the next position after a set of 4 tilt and 90 degree CW rotation
@@ -208,9 +208,9 @@ enum StoneType {
 impl fmt::Display for StoneType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            StoneType::Empty => write!(f, "."),
-            StoneType::Fixed => write!(f, "#"),
-            StoneType::Round => write!(f, "O"),
+            Self::Empty => write!(f, "."),
+            Self::Fixed => write!(f, "#"),
+            Self::Round => write!(f, "O"),
         }
     }
 }
@@ -220,10 +220,10 @@ impl FromStr for StoneType {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "." => Ok(StoneType::Empty),
-            "#" => Ok(StoneType::Fixed),
-            "O" => Ok(StoneType::Round),
-            _ => Err(format!("Invalid stone space: {}", s)),
+            "." => Ok(Self::Empty),
+            "#" => Ok(Self::Fixed),
+            "O" => Ok(Self::Round),
+            _ => Err(format!("Invalid stone space: {s}")),
         }
     }
 }
@@ -232,7 +232,7 @@ impl TryFrom<char> for StoneType {
     type Error = String;
 
     fn try_from(value: char) -> Result<Self, Self::Error> {
-        StoneType::from_str(&value.to_string())
+        Self::from_str(&value.to_string())
     }
 }
 
@@ -250,7 +250,7 @@ fn part02(input: &str) -> u32 {
     // the calculation takes place after each cycle, so we can do this or
     // litter +1 in the loop
     let mut current_cycle = 1;
-    let mut board = problem.grid.clone();
+    let mut board = problem.grid;
     while current_cycle < total_cycles {
         board = board.cycle(1);
 
@@ -264,9 +264,8 @@ fn part02(input: &str) -> u32 {
                 current_cycle += cycles_to_skip * cycle_length;
                 cycle_found = true;
                 continue;
-            } else {
-                history.insert(hash, current_cycle - 1);
             }
+            history.insert(hash, current_cycle - 1);
         }
         current_cycle += 1;
     }

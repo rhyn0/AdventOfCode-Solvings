@@ -68,7 +68,8 @@ class Day18(Day):
 
     def parse(self, puzzle_input: str) -> set[LavaPoint]:
         """Return set of 3d points of lava."""
-        return {tuple(map(int, line.split(","))) for line in puzzle_input.splitlines()}
+        # there are 3 points in each line
+        return {tuple(map(int, line.split(","))) for line in puzzle_input.splitlines()}  # type: ignore[misc]
 
     @staticmethod
     def _gen_face_neighbors(point: LavaPoint) -> Iterator[LavaPoint]:
@@ -76,7 +77,7 @@ class Day18(Day):
             for delta in range(-1, 2):
                 point_list = list(point)
                 point_list[index] += delta
-                yield tuple(point_list)
+                yield tuple(point_list)  # type: ignore[misc]
 
     def gen_valid_faces(
         self, point: LavaPoint, min_range: int, max_range: int
@@ -88,7 +89,7 @@ class Day18(Day):
 
     def part1(self, data: set[LavaPoint]) -> int:
         """Return number of exposed faces on lava."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
 
         return sum(
             1
@@ -109,7 +110,7 @@ class Day18(Day):
         Returns:
             int
         """
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
 
         min_range = min(min(pt) for pt in data) - 1
         max_range = max(max(pt) for pt in data) + 2
@@ -136,7 +137,7 @@ class Day18(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 18, 2022
     day = Day18()
     if args["--example"] or args["--verbose"]:

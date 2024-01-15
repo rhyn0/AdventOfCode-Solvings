@@ -57,7 +57,7 @@ class Day10(Day):
         }
         corrupted = []
         for line in data:
-            stack = deque()
+            stack: deque[str] = deque()
             for char in line:
                 try:
                     self.update_stack(char, stack)
@@ -77,7 +77,7 @@ class Day10(Day):
         }
         incomplete = []
         for line in data:
-            stack = deque()
+            stack: deque[str] = deque()
             for char in line:
                 try:
                     self.update_stack(char, stack)

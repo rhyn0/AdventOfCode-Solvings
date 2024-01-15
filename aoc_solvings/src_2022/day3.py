@@ -4,6 +4,7 @@ import os
 from string import ascii_lowercase
 from string import ascii_uppercase
 import sys
+from typing import ClassVar
 
 # External Party
 from aocd import get_data
@@ -21,7 +22,7 @@ except ImportError:
 class Day3(Day):
     """Day 3 of Advent of Code 2022."""
 
-    _item_priority = {
+    _item_priority: ClassVar = {
         char: point
         for point, char in enumerate(chain(ascii_lowercase, ascii_uppercase), start=1)
     }

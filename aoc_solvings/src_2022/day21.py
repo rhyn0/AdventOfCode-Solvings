@@ -24,6 +24,7 @@ import re
 import sys
 from textwrap import dedent
 from typing import TYPE_CHECKING
+from typing import ClassVar
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -109,7 +110,7 @@ class Monkey:
     value: int | None = field(default=None)
     oper: Callable[[int, int], int] | None = field(default=None)
 
-    REV_OPERS = {
+    REV_OPERS: ClassVar = {
         add: sub,
         sub: add,
         mul: floordiv,
@@ -166,13 +167,13 @@ class Monkey:
         left, right = self.monkey_sources
         if left.find_human():
             humn_branch = left
-            remain = self.REV_OPERS[self.oper](root_val, right.get_value())  # type: ignore
+            remain = self.REV_OPERS[self.oper](root_val, right.get_value())
         elif self.oper in (sub, floordiv):
             humn_branch = right
-            remain = self.oper(left.get_value(), root_val)  # type: ignore
+            remain = self.oper(left.get_value(), root_val)
         else:
             humn_branch = right
-            remain = self.REV_OPERS[self.oper](root_val, left.get_value())  # type: ignore
+            remain = self.REV_OPERS[self.oper](root_val, left.get_value())
 
         LOG.debug(
             "From %r, human branch should be %r and sanity check %r",
@@ -186,7 +187,7 @@ class Monkey:
 class Day21(Day):
     """Day 21 of Advent of Code 2022."""
 
-    MONKEY_OPS = {
+    MONKEY_OPS: ClassVar = {
         "+": add,
         "-": sub,
         "*": mul,
@@ -221,7 +222,7 @@ class Day21(Day):
 
     def part1(self, data: dict[str, Monkey]) -> int:
         """Return value that Monkey 'root' will return."""
-        LOG.info("-" * 20 + "starting part1" + "-" * 20)
+        LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
         return data["root"].get_value()
 
     def part2(self, data: dict[str, Monkey]) -> int:
@@ -241,7 +242,7 @@ class Day21(Day):
         Returns:
             int: Value that Monkey 'humn' needs to contribute to the network
         """
-        LOG.info("-" * 20 + "starting part2" + "-" * 20)
+        LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
         # root is an equality check of its two halves
         root = data["root"]
         root.oper = eq
@@ -264,7 +265,7 @@ class Day21(Day):
 
 if __name__ == "__main__":
     global args
-    args = docopt(__doc__)  # type: ignore
+    args = docopt(__doc__)
     DAY, YEAR = 21, 2022
     day = Day21()
 
