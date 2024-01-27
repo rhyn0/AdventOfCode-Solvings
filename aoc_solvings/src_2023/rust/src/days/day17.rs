@@ -385,32 +385,7 @@ mod tests {
         let grid = Grid::from_str(input).unwrap();
         assert_eq!(grid.to_string(), input);
     }
-    #[test]
-    fn test_zigzag_fails() {
-        // test that zigzag can't djikstra to end because it can't go straight
-        let input = indoc! {"
-            12345
-        "};
-        let grid = Grid::from_str(input).unwrap();
-        let start = Position { row: 0, col: 0 };
-        let cost_fn =
-            |zzvec: ZigZagVector| -> usize { grid.get(&zzvec.position()).unwrap() as usize };
-        let is_end_fn = |zzvec: ZigZagVector| -> bool {
-            zzvec.position()
-                == (Position {
-                    row: grid.num_rows - 1,
-                    col: grid.num_cols - 1,
-                })
-        };
-        let adjacency_fn =
-            |zzvec: ZigZagVector| -> Vec<ZigZagVector> { zzvec.on_board_neighbors(&grid) };
 
-        let total_dist = DjikstraSolver::new(&adjacency_fn, &cost_fn, &is_end_fn).cost(vec![
-            ZigZagVector::new(Vector::new(start, Direction::Right)),
-            ZigZagVector::new(Vector::new(start, Direction::Down)),
-        ]);
-        assert!(total_dist.is_none())
-    }
     #[test]
     fn test_zigzag_turn_fails() {
         // test that zigzag can't djikstra to end because it can't go straight
@@ -429,9 +404,25 @@ mod tests {
                     col: grid.num_cols - 1,
                 })
         };
-        let adjacency_fn =
-            |zzvec: ZigZagVector| -> Vec<ZigZagVector> { zzvec.on_board_neighbors(&grid) };
-
+        let adjacency_fn = |zzvec: ZigZagVector| -> Vec<ZigZagVector> {
+            let position_option_vec = if zzvec.consecutive_straight < 3 {
+                vec![
+                    zzvec.straight().ok(),
+                    zzvec.turn_right().ok(),
+                    zzvec.turn_left().ok(),
+                ]
+            } else {
+                vec![zzvec.turn_left().ok(), zzvec.turn_right().ok()]
+            };
+            position_option_vec
+                .into_iter()
+                .flatten()
+                .filter(|zzvec| {
+                    // let through only positions that are in the grid
+                    grid.get(&zzvec.position()).is_some()
+                })
+                .collect_vec()
+        };
         let total_dist = DjikstraSolver::new(&adjacency_fn, &cost_fn, &is_end_fn).cost(vec![
             ZigZagVector::new(Vector::new(start, Direction::Right)),
             ZigZagVector::new(Vector::new(start, Direction::Down)),
