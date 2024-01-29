@@ -16,10 +16,11 @@ pub mod day15;
 pub mod day16;
 pub mod day17;
 pub mod day18;
+pub mod day19;
 
 pub mod prelude {
     pub use super::{
         day01, day02, day03, day04, day05, day06, day07, day08, day09, day10, day11, day12, day13,
-        day14, day15, day16, day17, day18,
+        day14, day15, day16, day17, day18, day19,
     };
 }
