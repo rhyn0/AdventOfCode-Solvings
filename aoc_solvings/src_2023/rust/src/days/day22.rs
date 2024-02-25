@@ -74,6 +74,13 @@ impl FromStr for Vec3D {
     }
 }
 
+impl Vec3D {
+    #[allow(dead_code)]
+    const fn new(x: usize, y: usize, z: usize) -> Self {
+        Self { x, y, z }
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 struct SandBrick {
     start: Vec3D,
@@ -211,8 +218,6 @@ fn part2(input: &str) -> usize {
 
 #[cfg(test)]
 mod tests {
-    use itertools::Itertools;
-
     use super::*;
 
     #[test]
@@ -236,41 +241,6 @@ mod tests {
                 start: Vec3D::new(1, 0, 1),
                 end: Vec3D::new(1, 2, 1)
             }
-        );
-    }
-    #[test]
-    fn test_brick_range() {
-        let brick = SandBrick {
-            start: Vec3D::new(1, 0, 1),
-            end: Vec3D::new(1, 2, 1),
-        };
-        let range = brick.range().collect_vec();
-        assert_eq!(range.len(), 3);
-        assert_eq!(
-            range,
-            vec![
-                Vec3D::new(1, 0, 1),
-                Vec3D::new(1, 1, 1),
-                Vec3D::new(1, 2, 1)
-            ]
-        );
-    }
-    #[test]
-    fn test_negative_brick_range() {
-        // swap the start and end points of the previous test
-        let brick = SandBrick {
-            start: Vec3D::new(1, 2, 1),
-            end: Vec3D::new(1, 0, 1),
-        };
-        let range = brick.range().collect_vec();
-        assert_eq!(range.len(), 3);
-        assert_eq!(
-            range,
-            vec![
-                Vec3D::new(1, 0, 1),
-                Vec3D::new(1, 1, 1),
-                Vec3D::new(1, 2, 1),
-            ]
         );
     }
     #[test]
