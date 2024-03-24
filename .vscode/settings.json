@@ -1,7 +1,27 @@
 {
+    "rust-analyzer.linkedProjects": [
+        "./aoc_solvings/src_2023/rust/Cargo.toml",
+    ],
+    "rust-analyzer.checkOnSave": true,
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+    "rust-analyzer.showUnlinkedFileNotification": false,
+    "rust-analyzer.inlayHints.chainingHints.enable": true,
+    "editor.inlayHints.fontFamily": "Monaspace Krypton",
     "ruff.enable": true,
     "mypy-type-checker.args": [
         "--config-file=pyproject.toml"
     ],
     "mypy-type-checker.preferDaemon": false,
+    "files.exclude": {
+        "**/.git": false,
+        "**/.svn": false,
+        "**/.hg": false,
+        "**/CVS": false,
+        "**/.DS_Store": false,
+        "**/Thumbs.db": false,
+        "**/.mypy_cache": false,
+        "**/target": false
+    },
 }

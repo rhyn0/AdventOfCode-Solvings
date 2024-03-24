@@ -38,3 +38,22 @@ repos:
     hooks:
       - id: mypy
         args: ["--config-file=pyproject.toml"]
+  - repo: https://github.com/doublify/pre-commit-rust
+    rev: "v1.0"
+    hooks:
+      - id: clippy
+        name: clippy-2023 # do it this ugly way until i learn Rust packaging
+        args:
+          [
+            "--manifest-path",
+            "aoc_solvings/src_2023/rust/Cargo.toml",
+            "--",
+            "-D",
+            "warnings",
+            "-D",
+            "clippy::pedantic",
+            "-D",
+            "clippy::nursery",
+            "-D",
+            "clippy::all",
+          ]

@@ -1,0 +1,17 @@
+[package]
+name = "src_2023"
+version = "0.1.0"
+edition = "2021"
+authors = ["Ryan Ozawa"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = { version = "4.4.10", features = ["derive"] }
+indoc = "2.0.4"
+itertools = "0.12.0"
+num-bigint = "0.4.4"
+num-traits = "0.2.18"
+peg = "0.8.2"
+strum = { version = "0.25.0", features = ["derive"] }
+strum_macros = "0.25.3"
