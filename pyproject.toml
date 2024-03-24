@@ -15,9 +15,9 @@ numpy = "^1.24.2"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.2.1"
-ruff = "^0.1.13"
-black = "^23.1.0"
+black = "^24.3.0"
 mypy = "^1.8.0"
+ruff = "^0.3.4"
 
 
 [tool.poetry.group.test.dependencies]
