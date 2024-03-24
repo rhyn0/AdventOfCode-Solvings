@@ -22,8 +22,27 @@
     "editor.formatOnSave": true,
     "ruff.enable": true,
     "ruff.lint.enable": true,
+    "ruff.lint.run": "onSave",
+    "ruff.importStrategy": "fromEnvironment",
+    "mypy-type-checker.path": [
+        // due to VSCode LSP bug, we also have to unset the path
+        "/usr/bin/env",
+        "-u",
+        "PYTHONPATH",
+        "poetry",
+        "run",
+        "mypy",
+    ],
     "mypy-type-checker.args": [
         "--config-file=pyproject.toml"
+    ],
+    "black-formatter.path": [
+        "/usr/bin/env",
+        "-u",
+        "PYTHONPATH",
+        "poetry",
+        "run",
+        "black",
     ],
     "files.exclude": {
         "**/.git": false,
