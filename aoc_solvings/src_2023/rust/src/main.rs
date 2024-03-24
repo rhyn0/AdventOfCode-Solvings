@@ -35,7 +35,7 @@ fn solve_day(day: u16) -> fn(Option<&str>) -> SolutionPair {
         22 => Days::day22::solve,
         23 => Days::day23::solve,
         24 => Days::day24::solve,
-        // 25 => Days::day25::solve,
+        25 => Days::day25::solve,
         _ => panic!("Day {day} is not implemented yet"),
     }
 }
