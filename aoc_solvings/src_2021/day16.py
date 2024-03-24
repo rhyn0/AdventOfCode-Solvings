@@ -11,6 +11,7 @@ Options:
     --quiet         Disable logging for example mode.
     --parts PART    Do only specified part, options are 'a', 'b', or 'ab'. [default: ab]
 """
+
 from __future__ import annotations
 
 # Standard Library

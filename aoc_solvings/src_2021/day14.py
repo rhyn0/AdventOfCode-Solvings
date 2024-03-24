@@ -10,6 +10,7 @@ Options:
                 in a log file.
     --quiet     Disable logging for example mode.
 """
+
 from __future__ import annotations
 
 # Standard Library

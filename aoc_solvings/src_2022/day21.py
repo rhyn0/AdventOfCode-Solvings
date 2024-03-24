@@ -7,6 +7,7 @@ Options:
     --example   Use example input rather than running personal input.
     --local     Use problem data stored in local data folder as `inputYEAR-DAY.txt`
 """
+
 from __future__ import annotations
 
 # Standard Library
