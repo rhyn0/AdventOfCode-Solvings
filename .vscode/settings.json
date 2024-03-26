@@ -6,14 +6,44 @@
     "[rust]": {
         "editor.defaultFormatter": "rust-lang.rust-analyzer"
     },
+    "[python]": {
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "gitlens.codeLens.symbolScopes": [
+            "!Module"
+        ],
+        "editor.formatOnType": false,
+        "editor.wordBasedSuggestions": "off",
+        "editor.tabSize": 4
+    },
     "rust-analyzer.showUnlinkedFileNotification": false,
     "rust-analyzer.inlayHints.chainingHints.enable": true,
     "editor.inlayHints.fontFamily": "Monaspace Krypton",
+    "editor.formatOnSave": true,
     "ruff.enable": true,
+    "ruff.lint.enable": true,
+    "ruff.lint.run": "onSave",
+    "ruff.importStrategy": "fromEnvironment",
+    "mypy-type-checker.path": [
+        // due to VSCode LSP bug, we also have to unset the path
+        "/usr/bin/env",
+        "-u",
+        "PYTHONPATH",
+        "poetry",
+        "run",
+        "mypy",
+    ],
     "mypy-type-checker.args": [
         "--config-file=pyproject.toml"
     ],
-    "mypy-type-checker.preferDaemon": false,
+    "black-formatter.path": [
+        "/usr/bin/env",
+        "-u",
+        "PYTHONPATH",
+        "poetry",
+        "run",
+        "black",
+    ],
     "files.exclude": {
         "**/.git": false,
         "**/.svn": false,
