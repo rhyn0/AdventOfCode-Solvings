@@ -24,7 +24,7 @@ repos:
       - id: black
         language_version: python3
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.1.13
+    rev: v0.3.4
     hooks:
       - id: ruff
         exclude: "^.*test(s)?/|__init__"
@@ -43,6 +43,8 @@ repos:
     hooks:
       - id: clippy
         name: clippy-2023 # do it this ugly way until i learn Rust packaging
+        stages:
+          - "manual"
         args:
           [
             "--manifest-path",

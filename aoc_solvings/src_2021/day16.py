@@ -14,17 +14,15 @@ Options:
 from __future__ import annotations
 
 # Standard Library
-from abc import ABC
-from abc import abstractmethod
+from collections.abc import Callable
+from dataclasses import dataclass
+from functools import reduce
 import logging
+import operator
 import os
 from pathlib import Path
 import sys
 from textwrap import dedent
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
 
 # External Party
 from aocd import get_data
@@ -45,205 +43,219 @@ LOG.setLevel(logging.CRITICAL)
 
 EXAMPLE = dedent(
     """\
-    A0016C880162017C3686B18A3D4780"""
+    9C0141080250320F1802104A08"""
 )
 
 VALBIT_ID = 4
+PACKET_VERSION_LEN = 3
+PACKET_TYPE_LEN = 3
+HEADER_LEN = 6
 
 
-class BITSPacket(ABC):
-    version: int
-    pkt_type: int
-
-    def __init__(self, ver: int, bit_type: int) -> None:
-        self.version = ver
-        self.pkt_type = bit_type
-
-    def __repr__(self) -> str:
-        return f"BITSPacket(version={self.version}, type={self.pkt_type})"
-
-    @abstractmethod
-    def evaluate(self) -> int:
-        pass
-
-    @classmethod
-    @abstractmethod
-    def parse_from(
-        cls, version: int, pkt_type: int, value_part: str
-    ) -> tuple[BITSPacket, int]:
-        pass
-
-
-class ValBITS(BITSPacket):
-    value: int
-
-    def __init__(self, ver: int, bit_type: int, value: int) -> None:
-        super().__init__(ver, bit_type)
-        self.value = value
-
-    def evaluate(self) -> int:
-        return self.value
-
-    @classmethod
-    def parse_from(
-        cls, version: int, pkt_type: int, value_part: str
-    ) -> tuple[BITSPacket, int]:
-        """Return the created BITSPacket and how long the whole packet was."""
-        val_str = ""
-        idx = 0
-        while value_part[idx] != "0":
-            val_str += value_part[idx + 1 : idx + 5]
-            idx += 5
-        val_str += value_part[idx + 1 : idx + 5]
-        return (
-            ValBITS(version, pkt_type, int(val_str, 2)),
-            idx + 5 + 6,
-        )  # last index + 5 to end of pentad + header
-
-
-class OpBITS(BITSPacket):
+@dataclass
+class BITSPacket:
+    packet_version: int
+    packet_type: int
+    packet_length: int
     subpackets: list[BITSPacket]
-    op: Callable[..., int]
+    op: Callable[..., int] | None = None
+    value: int = 0
 
-    def add_subpacket(self, pkt: BITSPacket) -> None:
-        self.subpackets.append(pkt)
+    def sum_versions(self) -> int:
+        """Return sum of all packet versions in this packet."""
+        return self.packet_version + sum(
+            [pkt.sum_versions() for pkt in self.subpackets]
+        )
 
-    def evaluate(self) -> int:
-        return self.op(*self.subpackets)
+    def perform_op(self) -> int:
+        if self.op is None:
+            return self.value
+        operands = [pkt.perform_op() for pkt in self.subpackets]
+        LOG.info("Performing operation %s on operands %r", self.op, operands)
+        return int(self.op(*operands))
 
-    @classmethod
-    def parse_from(
-        cls, version: int, pkt_type: int, value_part: str
-    ) -> tuple[OpBITS, int]:
-        LOG.debug("Operator Pkt type is %r", value_part[0])
-        args = (version, pkt_type, value_part[1:])
-        return (
-            LenOpBITS.parse_from(*args)
-            if value_part[0] == "0"
-            else PktOpBITS.parse_from(*args)
+    @staticmethod
+    def sum_packet(
+        packet_version: int,
+        packet_type: int,
+        packet_len: int,
+        subpackets: list[BITSPacket],
+    ) -> BITSPacket:
+        return BITSPacket(
+            packet_version,
+            packet_type,
+            packet_len,
+            subpackets,
+            op=lambda *args: reduce(lambda x, y: x + y, args),
+        )
+
+    @staticmethod
+    def prod_packet(
+        packet_version: int,
+        packet_type: int,
+        packet_len: int,
+        subpackets: list[BITSPacket],
+    ) -> BITSPacket:
+        return BITSPacket(
+            packet_version,
+            packet_type,
+            packet_len,
+            subpackets,
+            op=lambda *args: reduce(lambda x, y: x * y, args),
+        )
+
+    @staticmethod
+    def minimum_packet(
+        packet_version: int,
+        packet_type: int,
+        packet_len: int,
+        subpackets: list[BITSPacket],
+    ) -> BITSPacket:
+        return BITSPacket(
+            packet_version,
+            packet_type,
+            packet_len,
+            subpackets,
+            op=lambda *args: min(args),
+        )
+
+    @staticmethod
+    def maximum_packet(
+        packet_version: int,
+        packet_type: int,
+        packet_len: int,
+        subpackets: list[BITSPacket],
+    ) -> BITSPacket:
+        return BITSPacket(
+            packet_version,
+            packet_type,
+            packet_len,
+            subpackets,
+            op=lambda *args: max(args),
+        )
+
+    @staticmethod
+    def greater_than_packet(
+        packet_version: int,
+        packet_type: int,
+        packet_len: int,
+        subpackets: list[BITSPacket],
+    ) -> BITSPacket:
+        return BITSPacket(
+            packet_version,
+            packet_type,
+            packet_len,
+            subpackets,
+            op=operator.gt,
+        )
+
+    @staticmethod
+    def less_than_packet(
+        packet_version: int,
+        packet_type: int,
+        packet_len: int,
+        subpackets: list[BITSPacket],
+    ) -> BITSPacket:
+        return BITSPacket(
+            packet_version,
+            packet_type,
+            packet_len,
+            subpackets,
+            op=operator.lt,
+        )
+
+    @staticmethod
+    def equal_packet(
+        packet_version: int,
+        packet_type: int,
+        packet_len: int,
+        subpackets: list[BITSPacket],
+    ) -> BITSPacket:
+        return BITSPacket(
+            packet_version,
+            packet_type,
+            packet_len,
+            subpackets,
+            op=operator.eq,
         )
 
 
-class LenOpBITS(OpBITS):
-    total_pkt_len: int
+def parse_packet_headers(packet: str) -> tuple[int, int]:
+    """Parse header of packet and return version and type.
 
-    def __init__(self, ver: int, bit_type: int, pkt_len: int) -> None:
-        super().__init__(ver, bit_type)
-        self.total_pkt_len = pkt_len
-
-    @classmethod
-    def parse_from(
-        cls, version: int, pkt_type: int, value_part: str
-    ) -> tuple[OpBITS, int]:
-        subpkt_len = int(value_part[:15], 2)
-        LenOpBITS(version, pkt_type, subpkt_len)
+    First 3 bits are version and next 3 bits are type.
+    """
+    pkt_vers = int(packet[:PACKET_VERSION_LEN], 2)
+    pkt_type = int(packet[PACKET_VERSION_LEN : PACKET_VERSION_LEN + PACKET_TYPE_LEN], 2)
+    return pkt_vers, pkt_type
 
 
-class PktOpBITS(OpBITS):
-    total_pkts: int
+def parse_packet(packet: str) -> BITSPacket:
+    """Return BITSPacket from packet string."""
 
-    def __init__(self, ver: int, bit_type: int, pkt_len: int) -> None:
-        super().__init__(ver, bit_type)
-        self.total_pkts = pkt_len
+    def parse_value_packet(version: int, packet_type: int, packet: str) -> BITSPacket:
+        # type is always 4 here, but pass in anyway
+        idx = 0
+        packet_len = len(packet)
+        value = ""
+        while idx < packet_len and packet[idx] == "1":
+            idx += 1
+            # bits for values come in groups of 5, with first bit
+            # being identifier on if more bits
+            value += packet[idx : idx + 4]
+            idx += 4
+        value += packet[idx + 1 : idx + 5]
+        idx += 5  # for the end case
+        # TODO: do we need the value ever?
+        # add 6 for the header
+        LOG.info("Value packet was of length %d", idx + 6)
+        return BITSPacket(version, packet_type, idx + 6, [], value=int(value, 2))
 
-    @classmethod
-    def parse_from(
-        cls, version: int, pkt_type: int, value_part: str
-    ) -> tuple[OpBITS, int]:
-        return super().parse_from(version, pkt_type, value_part)
+    LOG.debug("Parsing packet from input %r", packet)
+    idx = 0
+    pkt_vers, pkt_type = parse_packet_headers(packet)
+    LOG.debug("Packet version: %s, Packet type: %s", pkt_vers, pkt_type)
+    idx += HEADER_LEN
+    if pkt_type == VALBIT_ID:
+        LOG.info("Parsing value packet from input %r", packet)
+        return parse_value_packet(pkt_vers, pkt_type, packet[idx:])
+    subpackets = []
+    idx += 1  # for operator type bit
+    if packet[idx - 1] == "1":
+        # 11 bits for the number of subpackets contained
+        num_subpackets = int(packet[idx : idx + 11], 2)
+        LOG.debug("Found Operator NumSubpacket: %s", num_subpackets)
+        idx += 11
+        for i in range(num_subpackets):
+            subpacket = parse_packet(packet[idx:])
+            subpackets.append(subpacket)
+            LOG.debug("Subpacket %d was of length %d", i, subpacket.packet_length)
+            idx += subpacket.packet_length
+    else:
+        # 15 bits for the length of all subpackets contained
+        subpacket_len = int(packet[idx : idx + 15], 2)
+        idx += 15
+        original_idx = idx
+        LOG.debug("Found Operator TotalLengthPacket: %s", subpacket_len)
+        while idx - original_idx < subpacket_len:
+            subpacket = parse_packet(packet[idx:])
+            subpackets.append(subpacket)
+            LOG.debug("Subpacket at %d was of length %d", idx, subpacket.packet_length)
+            idx += subpacket.packet_length
 
-
-class BITSPacketParser:
-    # value packet of one set of bits is the smallest a packet can ever be
-    MIN_PKT_LEN = 11
-
-    @classmethod
-    def parse_packet_header(cls, string: str) -> tuple[int, int]:
-        """Get details of the first packet found in the string.
-
-        Args:
-            string (str): input bit string
-
-        Returns:
-            tuple[int, int, int]: version, type id, len of this packet
-        """
-        # TODO: remove pkt_len from return, its causing double parsing in this case
-        version = int(string[:3], 2)
-        pkt_type = int(string[3:6], 2)
-        idx = 6
-        if pkt_type == VALBIT_ID:
-            while string[idx] == "1":
-                idx += 5
-            return version, pkt_type
-
-        idx += 1
-        if string[6] == "0":
-            idx += 15
-            return version, pkt_type
-        LOG.debug("Given a packet num operator packet")
-        # some number of subpackets that we don't know the length of
-        return version, pkt_type
-
-    @classmethod
-    def parse_packets(cls, bin_string: str) -> tuple[int, list[BITSPacket]]:
-        """Parse packets from the binary string.
-
-        Args:
-            bin_string (str): binary string
-
-        Returns:
-            tuple[int, list[BITSPacket]]: versions sum, parsed packets
-        """
-        if not bin_string:
-            return 0, []
-        str_len = len(bin_string)
-        index, vers, pkts = 0, 0, []
-        LOG.debug("Parsing packets from given string of %r", bin_string)
-        while index < str_len:
-            LOG.debug(
-                "Looking for packet in bin_string starting at index %d.\
-                    Bin string is of length %d",
-                index,
-                str_len,
-            )
-            if index >= str_len - cls.MIN_PKT_LEN:
-                # no valid header to be found now
-                break
-            pkt_ver, pkt_type = cls.parse_packet_header(bin_string[index:])
-            LOG.debug(
-                "Current packet is a %r of version %d and type %d",
-                ValBITS.__name__ if pkt_type == VALBIT_ID else OpBITS.__name__,
-                pkt_ver,
-                pkt_type,
-            )
-            index += 6
-            LOG.debug("Index was bumped past the header to be %d", index)
-            if pkt_type == VALBIT_ID:
-                LOG.debug(
-                    "Finding a literal value from the string starting at index %d",
-                    index,
-                )
-                new_pkt, pkt_len = ValBITS.parse_from(
-                    pkt_ver, pkt_type, bin_string[index:]
-                )
-                pkts.append(new_pkt)
-                LOG.debug("Created value packet of length %d - %r", pkt_len, pkts[-1])
-                vers += pkt_ver
-            else:
-                new_pkt, pkt_len = OpBITS.parse_from(
-                    pkt_ver, pkt_type, bin_string[index:]
-                )
-                # TODO - OpBITS sum_version?
-                sub_vers_sum, new_pkts = cls.parse_packets(bin_string[index:])
-                vers += sub_vers_sum
-                pkts.append(new_pkt)
-                index += pkt_len
-            # might be double counting the version of the operator pkt
-            index += pkt_len
-
-        return vers, pkts
+    type_map = {
+        0: BITSPacket.sum_packet,
+        1: BITSPacket.prod_packet,
+        2: BITSPacket.minimum_packet,
+        3: BITSPacket.maximum_packet,
+        5: BITSPacket.greater_than_packet,
+        6: BITSPacket.less_than_packet,
+        7: BITSPacket.equal_packet,
+    }
+    return type_map[pkt_type](pkt_vers, pkt_type, idx, subpackets)
 
 
+@dataclass
 class Day16(Day):
     """Day 16 of Advent of Code 2021."""
 
@@ -254,14 +266,14 @@ class Day16(Day):
     def part1(self, data: str) -> int:
         """Return sum of the packet versions for all packets in data."""
         LOG.info("%s starting part1 %s", "-" * 20, "-" * 20)
-        total_vers, pkts = BITSPacketParser.parse_packets(data)
-        LOG.info("Created %d packets which are %s", len(pkts), pkts)
-        return total_vers
+        bit_packet = parse_packet(data)
+        return bit_packet.sum_versions()
 
-    def part2(self, data: list[list[int]]) -> int:
+    def part2(self, data: str) -> int:
         """Return count of max element minus count of min element after insertions."""
         LOG.info("%s starting part2 %s", "-" * 20, "-" * 20)
-        return -1
+        bit_packet = parse_packet(data)
+        return bit_packet.perform_op()
 
 
 if __name__ == "__main__":
@@ -285,7 +297,7 @@ if __name__ == "__main__":
         data = (Path(sys.path[0]) / "data" / f"input{YEAR}-{DAY}.txt").open().read()
     else:
         data = get_data(day=DAY, year=YEAR)
-    answers = day.solve(data, parts=args["--parts"][0])
+    answers = day.solve(data, parts=args["--parts"])
     print(answers)
     if args["--example"]:
         sys.exit(0)
