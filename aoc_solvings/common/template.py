@@ -1,6 +1,12 @@
 # Standard Library
 from abc import ABC
 from abc import abstractmethod
+from pathlib import Path
+from typing import Any
+
+# External Party
+from aocd import get_data
+from aocd import submit
 
 
 class AnswerNotFoundError(Exception):
@@ -33,3 +39,38 @@ class Day(ABC):
         solution2 = self.part2(data) if "b" in parts else None
 
         return solution1, solution2
+
+
+def get_data_args(
+    args: dict[str, Any],
+    day: int,
+    year: int = 2021,
+) -> str:
+    """Return the data for the given day and year."""
+    global EXAMPLE
+    if args["--example"]:
+        return EXAMPLE  # type: ignore[name-defined]
+    if args["--local"]:
+        return (
+            (Path(__file__).parents[1] / "data" / f"input{year}-{day}.txt")
+            .open()
+            .read()
+        )
+    return get_data(day=day, year=year)
+
+
+def submit_answers(
+    answers: tuple[Any, Any], parts: str, day: int, year: int = 2021
+) -> None:
+    """Submit the answers for the given day and year.
+
+    Args:
+        answers (tuple[Any, Any]): Answer tuple - (part1, part2).
+        parts (str): String of parts to submit. Ex: "ab".
+        day (int): Which day to submit for
+        year (int, optional): Which year to submit for. Defaults to 2021.
+    """
+    for ans, part in zip(answers, "ab", strict=True):
+        if part not in parts:
+            continue
+        submit(ans, day=day, year=year, part=part)
