@@ -256,7 +256,6 @@ def parse_packet(packet: str) -> BITSPacket:
     return type_map[pkt_type](pkt_vers, pkt_type, idx, subpackets)
 
 
-@dataclass
 class Day16(Day):
     """Day 16 of Advent of Code 2021."""
 
