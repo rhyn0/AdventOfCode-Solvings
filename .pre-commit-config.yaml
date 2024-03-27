@@ -43,6 +43,8 @@ repos:
     hooks:
       - id: clippy
         name: clippy-2023 # do it this ugly way until i learn Rust packaging
+        stages:
+          - "manual"
         args:
           [
             "--manifest-path",

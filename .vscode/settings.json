@@ -21,6 +21,23 @@
     "editor.inlayHints.fontFamily": "Monaspace Krypton",
     "editor.formatOnSave": true,
     "ruff.enable": true,
+    "ruff.path": [
+        // this won't work on different machines. Should probably open an issue
+        "/home/rhyn0/.cache/pypoetry/virtualenvs/ro-adventofcode-JSfyPqXq-py3.10/bin/ruff"
+    ],
+    "ruff.lint.enable": true,
+    "ruff.lint.run": "onType",
+    "ruff.fixAll": true,
+    "ruff.importStrategy": "fromEnvironment",
+    "mypy-type-checker.path": [
+        // due to VSCode LSP bug, we also have to unset the path
+        "/usr/bin/env",
+        "-u",
+        "PYTHONPATH",
+        "poetry",
+        "run",
+        "mypy",
+    ],
     "ruff.lint.enable": true,
     "ruff.lint.run": "onSave",
     "ruff.importStrategy": "fromEnvironment",

@@ -24,74 +24,6 @@ ruff = "^0.3.4"
 pytest = "^7.2.2"
 
 [tool.ruff]
-# Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
-select = [
-    "E",
-    "F",
-    "W",   # pycodestyle warnings
-    "C90", # Mccabe complexity
-    "N",   # pep8-naming
-    "D",   # pydocstyle
-    "UP",  # pyupgrade
-    "B",   # flake8-bugbear
-    "A",   # flake8-builtins
-    "C4",  # flake8-comprehensions
-    "G",   # flake8-logging
-    "PIE", # flake8-pie
-    "PT",  # flake8-pytest-style
-    "RET", # flake8-return
-    "SIM", # flake8-simplify
-    "TCH", # flake8-type-checking
-    "PD",  # pandas vet
-    "TRY", # tryceratops,
-    "PLR", # pylint: refactor
-    "RUF",
-]
-ignore = ["D100"]
-
-# Allow autofix for listed rules.
-fix = true
-show-fixes = true
-fixable = [
-    "A",
-    "ANN",
-    "ARG",
-    "B",
-    "BLE",
-    "COM",
-    "D",
-    "DTZ",
-    "E",
-    "EM",
-    "ERA",
-    "EXE",
-    "F",
-    "FBT",
-    "G",
-    "ICN",
-    "INP",
-    "ISC",
-    "N",
-    "PD",
-    "PGH",
-    "PIE",
-    "PL",
-    "PT",
-    "PTH",
-    "Q",
-    "RET",
-    "RUF",
-    "S",
-    "SIM",
-    "TCH",
-    "TID",
-    "TRY",
-    "UP",
-    "W",
-    "YTT",
-]
-unfixable = []
-
 # Exclude a variety of commonly ignored directories.
 exclude = [
     ".bzr",
@@ -115,29 +47,64 @@ exclude = [
     "node_modules",
     "venv",
 ]
-
+# Enable autofix for rules that support it.
+fix = true
+# Indent width for long-line violations
+indent-width = 4
 # Same as Black.
 line-length = 88
 
-# Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+output-format = "concise"
 
-# Assume Python 3.10.
+required-version = ">=0.3.4"
+# Show fixes in the output.
+show-fixes = true
 target-version = "py310"
 
-# Error output type
-output-format = "text"
+[tool.ruff.lint]
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+# all rules are fixable
+fixable = ["ALL"]
+ignore = [
+    "D100",   # Missing docstring in public module
+    "TCH003", # Type checking block
+]
+select = [
+    "E",
+    "F",
+    "W",   # pycodestyle warnings
+    "C90", # Mccabe complexity
+    "N",   # pep8-naming
+    "D",   # pydocstyle
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "A",   # flake8-builtins
+    "C4",  # flake8-comprehensions
+    "G",   # flake8-logging
+    "PIE", # flake8-pie
+    "PT",  # flake8-pytest-style
+    "RET", # flake8-return
+    "SIM", # flake8-simplify
+    "TCH", # flake8-type-checking
+    "PD",  # pandas vet
+    "TRY", # tryceratops,
+    "PLR", # pylint: refactor
+    "RUF",
+]
+unfixable = []
 
-[tool.ruff.mccabe]
+
+[tool.ruff.lint.mccabe]
 # Unlike Flake8, default to a complexity level of 10.
 max-complexity = 10
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "aoc_solvings/src_2022/day19.py" = ["E501"]
 "aoc_solvings/src_2021/day8.py" = ["PLR2004"]
 "aoc_solvings/src_2021/day16.py" = ["D101", "D102", "D105", "D107"]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.isort]
@@ -160,10 +127,6 @@ warn_unused_configs = true
 disable_error_code = "import-untyped"
 packages = "aoc_solvings"
 ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = "aoc_solvings.src_2021.day16"
-ignore_errors = true
 
 
 [build-system]
