@@ -21,7 +21,8 @@ def edit_logger_for_verbosity(
         full_quiet (bool): Whether the user wants no output.
     """
     if verbose:
-        handle = logging.FileHandler(f"{Path(__file__).parent}/{logger.name}.log", "w")
+        print(Path.cwd())
+        handle = logging.FileHandler(f"{Path.cwd()}/{logger.name}.log", "w")
         handle.setFormatter(
             logging.Formatter("%(funcName)s-%(levelname)s:%(lineno)d %(message)s")
         )

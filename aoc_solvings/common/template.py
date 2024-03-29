@@ -3,6 +3,7 @@ from abc import ABC
 from abc import abstractmethod
 from pathlib import Path
 from typing import Any
+from typing import ClassVar
 
 # External Party
 from aocd import get_data
@@ -19,6 +20,10 @@ class AnswerNotFoundError(Exception):
 
 class Day(ABC):
     """Basic template for Advent of Code challenges."""
+
+    day: ClassVar[int]
+    year: ClassVar[int]
+    example: ClassVar[str]
 
     @abstractmethod
     def parse(self, puzzle_input):
@@ -41,22 +46,21 @@ class Day(ABC):
         return solution1, solution2
 
 
-def get_data_args(
-    args: dict[str, Any],
-    day: int,
-    year: int = 2021,
-) -> str:
+def get_data_args(args: dict[str, Any], day_problem: Day) -> str:
     """Return the data for the given day and year."""
-    global EXAMPLE
     if args["--example"]:
-        return EXAMPLE  # type: ignore[name-defined]
+        return day_problem.example
     if args["--local"]:
         return (
-            (Path(__file__).parents[1] / "data" / f"input{year}-{day}.txt")
+            (
+                Path(__file__).parents[1]
+                / "data"
+                / f"input{day_problem.year}-{day_problem.day}.txt"
+            )
             .open()
             .read()
         )
-    return get_data(day=day, year=year)
+    return get_data(day=day_problem.day, year=day_problem.year)
 
 
 def submit_answers(
