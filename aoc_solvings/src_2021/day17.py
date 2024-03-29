@@ -19,24 +19,17 @@ import os
 import sys
 from textwrap import dedent
 
-# External Party
-from docopt import docopt
-
 try:
     # My Modules
-    from common.log import edit_logger_for_verbosity
     from common.log import get_logger
     from common.template import Day
-    from common.template import get_data_args
-    from common.template import submit_answers
+    from common.template import main
 except ImportError:
     sys.path.insert(0, os.path.dirname(sys.path[0]))
     # My Modules
-    from common.log import edit_logger_for_verbosity
     from common.log import get_logger
     from common.template import Day
-    from common.template import get_data_args
-    from common.template import submit_answers
+    from common.template import main
 
 
 LOG = get_logger("day17")
@@ -118,16 +111,4 @@ class Day17(Day):
 
 
 if __name__ == "__main__":
-    global args
-    args = docopt(__doc__)
-    problem = Day17()
-
-    edit_logger_for_verbosity(
-        LOG, args["--verbose"] or args["--example"], args["--quiet"]
-    )
-    data = get_data_args(args, problem)
-    answers = problem.solve(data, parts=args["--parts"])
-    print(answers)
-    if args["--example"]:
-        sys.exit(0)
-    submit_answers(answers, args["--parts"], day=problem.day, year=problem.year)
+    main(Day17())
