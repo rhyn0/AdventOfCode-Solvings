@@ -6,6 +6,7 @@ Usage:
 Options:
     --example   Use example input rather than running personal input.
 """
+
 from __future__ import annotations
 
 # Standard Library
@@ -78,9 +79,11 @@ class ValveSystem:
     def _compute_steps(self) -> dict[str, dict[str, float]]:
         dist_to_valves = {
             valve_name: {
-                conn_valve_name: 1.0
-                if conn_valve_name in self.pipes[valve_name].connected
-                else float("inf")
+                conn_valve_name: (
+                    1.0
+                    if conn_valve_name in self.pipes[valve_name].connected
+                    else float("inf")
+                )
                 for conn_valve_name in self.pipes
             }
             for valve_name in self.pipes

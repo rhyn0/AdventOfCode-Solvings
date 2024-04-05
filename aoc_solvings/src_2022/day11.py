@@ -6,6 +6,7 @@ Usage:
 Options:
     --example   Use example input rather than running personal input.
 """
+
 from __future__ import annotations
 
 # Standard Library
