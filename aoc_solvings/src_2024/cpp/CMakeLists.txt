@@ -11,12 +11,12 @@ set(CMAKE_CXX_COMPILER /usr/bin/clang++)
 
 
 # Automatically find all solution source files
-file(GLOB_RECURSE SOLUTION_SOURCES 
+file(GLOB_RECURSE SOLUTION_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/solutions/*.cpp"
 )
 
 # Automatically find all util source files
-file(GLOB_RECURSE UTIL_SOURCES 
+file(GLOB_RECURSE UTIL_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/utils/*.cpp"
 )
 

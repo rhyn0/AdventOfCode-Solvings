@@ -31,4 +31,3 @@ CheckOptions:
   llvm-qualified-auto.AddConstToQualified: 'false'
 SystemHeaders:   false
 UseColor: true
-
