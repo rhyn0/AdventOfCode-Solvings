@@ -30,8 +30,10 @@ The exact problem input data is not committed but inside the folder called `inpu
 ```shell
 mkdir build
 cd build
-cmake .. && cmake --build .
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON .. && cmake --build .
 ```
+
+Need the extra option flag only *once* to create the `compile_commands.json` file. This is important for `clang-tidy` in [Linting](#linting) later.
 
 ### Style
 
@@ -46,11 +48,9 @@ clang-format --style=file --Werror -i src/**/*.{c,h}pp
 This folder section will use `clang-tidy` for linting. Configuration is close to default config and saved in `.clang-tidy`. To run the linter
 
 ```shell
-clang-tidy -q src/**/*.{c,h}pp
+clang-tidy -p build src/**/*.{c,h}pp
 ```
 
 ## References
 
 *Incomplete List of Helpful Insights*
-
-

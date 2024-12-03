@@ -124,4 +124,5 @@
         "unordered_map": "cpp",
         "xhash": "cpp"
     },
+    "cmake.sourceDirectory": "${workspaceFolder}/aoc_solvings/src_2024/cpp",
 }
