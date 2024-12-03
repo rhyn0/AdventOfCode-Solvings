@@ -7,6 +7,7 @@
 
 // Include all day solutions
 #include "solutions/day01.hpp"
+#include "solutions/day02.hpp"
 // ... add more as you implement them
 
 using solve_function = void (*)(const std::string &);
@@ -43,7 +44,7 @@ int main(int argc, char *argv[]) {
     // Map of available solutions
     solve_function solutions[][2] = {
         {aoc::solve_day01_part1, aoc::solve_day01_part2}, // day 1
-        // {aoc::solve_day02_part1, aoc::solve_day02_part2},  // day 2
+        {aoc::solve_day02_part1, aoc::solve_day02_part2},  // day 2
         // Add more solution functions as you implement them
     };
 
