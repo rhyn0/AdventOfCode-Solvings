@@ -21,6 +21,7 @@ public:
   std::string const &operator*() const;
   LineIterator &operator++();
   bool operator!=(const LineIterator &other) const;
+  bool operator==(const LineIterator &other) const;
 
   // Begin and end functions
   LineIterator &begin();

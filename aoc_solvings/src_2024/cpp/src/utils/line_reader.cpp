@@ -22,6 +22,9 @@ LineIterator &LineIterator::operator++() {
 bool LineIterator::operator!=(const LineIterator &other) const {
   return is_valid != other.is_valid;
 }
+bool LineIterator::operator==(const LineIterator &other) const {
+  return is_valid == other.is_valid;
+}
 
 // For range-based for loop
 LineIterator &LineIterator::begin() { return *this; }

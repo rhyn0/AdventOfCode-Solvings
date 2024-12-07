@@ -139,7 +139,9 @@
         "cwctype": "cpp",
         "execution": "cpp",
         "mutex": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "deque": "cpp",
+        "unordered_set": "cpp"
     },
     "cmake.sourceDirectory": "${workspaceFolder}/aoc_solvings/src_2024/cpp",
     "cmake.buildDirectory": "${workspaceFolder}/aoc_solvings/src_2024/cpp/build",
