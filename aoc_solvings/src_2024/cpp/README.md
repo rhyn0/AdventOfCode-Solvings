@@ -4,7 +4,7 @@ I used to write C code a lot for learning as I was able to inspect the byte code
 
 ## Learnings
 
-TBD - haven't gotten through a lot
+- function naming. Since combining all these solution files could eventually overload a name, make sure to namespace them.
 
 ## Usage
 
