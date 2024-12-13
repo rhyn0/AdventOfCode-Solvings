@@ -5,6 +5,7 @@ I used to write C code a lot for learning as I was able to inspect the byte code
 ## Learnings
 
 - function naming. Since combining all these solution files could eventually overload a name, make sure to namespace them.
+- writing lambda functions with capture lists
 
 ## Usage
 
