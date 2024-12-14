@@ -55,3 +55,8 @@ clang-tidy -p build src/**/*.{c,h}pp
 ## References
 
 *Incomplete List of Helpful Insights*
+
+### Day 14 Part 2
+
+- [Reddit](https://www.reddit.com/r/adventofcode/comments/1he0asr/comment/m1zzfsh)
+- [Chinese Remainder Theorem](https://en.wikipedia.org/wiki/Chinese_remainder_theorem)
