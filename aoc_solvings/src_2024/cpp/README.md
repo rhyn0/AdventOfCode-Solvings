@@ -60,3 +60,8 @@ clang-tidy -p build src/**/*.{c,h}pp
 
 - [Reddit](https://www.reddit.com/r/adventofcode/comments/1he0asr/comment/m1zzfsh)
 - [Chinese Remainder Theorem](https://en.wikipedia.org/wiki/Chinese_remainder_theorem)
+
+### Day 17 Part 2
+
+I really have no idea what im doing here, will have to come back to this one. 1am coding is not cutting this.
+HAHA, i love changing data types for my whole codebase at a later time.
