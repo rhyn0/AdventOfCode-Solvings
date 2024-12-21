@@ -25,6 +25,7 @@
 #include "solutions/day17.hpp"
 #include "solutions/day18.hpp"
 #include "solutions/day19.hpp"
+#include "solutions/day20.hpp"
 // ... add more as you implement them
 
 using solve_function = void (*)(const std::string &);
@@ -32,7 +33,9 @@ using solve_function = void (*)(const std::string &);
 void print_usage() {
   std::cout << "Usage: ./aoc <day> <input_file>\n"
             << "  day: number between 1 and 25\n"
-            << "  input_file: path to input file\n";
+            << "  input_file: path to input file\n"
+            << "  --part: optional, specify which part to run (1 or 2). If not "
+               "specified, both parts will run.\n";
 }
 
 void print_execution_time(const std::chrono::duration<double> &duration,
@@ -45,7 +48,7 @@ void print_execution_time(const std::chrono::duration<double> &duration,
 int main(int argc, char *argv[]) {
   try {
     // Check arguments
-    if (argc != 3) {
+    if (argc < 3) {
       print_usage();
       return 1;
     }
@@ -58,6 +61,23 @@ int main(int argc, char *argv[]) {
 
     // Check if input file exists
     std::string input_path = argv[2];
+
+    // parse optional --part flag
+    int part_to_run = 0; // run both parts by default
+    for (int i = 3; i < argc; i++) {
+      if (std::string(argv[i]) == "--part") {
+        if (i + 1 < argc) {
+          part_to_run = std::stoi(argv[i + 1]);
+          if (part_to_run < 1 || part_to_run > 2) {
+            throw std::out_of_range("Part must be between 1 and 2");
+          }
+        } else {
+          throw std::invalid_argument("--part requires an argument");
+        }
+        break;
+      }
+    }
+
     // Map of available solutions
     solve_function solutions[][2] = {
         {aoc::solve_day01_part1, aoc::solve_day01_part2}, // day 1
@@ -79,6 +99,7 @@ int main(int argc, char *argv[]) {
         {aoc::solve_day17_part1, aoc::solve_day17_part2}, // day 17
         {aoc::solve_day18_part1, aoc::solve_day18_part2}, // day 18
         {aoc::solve_day19_part1, aoc::solve_day19_part2}, // day 19
+        {aoc::solve_day20_part1, aoc::solve_day20_part2}, // day 20
         // Add more solution functions as you implement them
     };
 
@@ -94,12 +115,22 @@ int main(int argc, char *argv[]) {
     std::cout << "\n=== Advent of Code 2024 - Day " << day << " ===\n";
 
     // Run solution and measure time
-    for (int part = 0; part < 2; part++) {
+    if (part_to_run == 0) {
+      for (int part = 0; part < 2; part++) {
+        auto start = std::chrono::high_resolution_clock::now();
+        solutions[day - 1][part](
+            input_path); // Arrays are 0-based, so subtract 1
+        auto end = std::chrono::high_resolution_clock::now();
+        // Print execution time
+        print_execution_time(end - start, part + 1);
+      }
+    } else {
       auto start = std::chrono::high_resolution_clock::now();
-      solutions[day - 1][part](input_path); // Arrays are 0-based, so subtract 1
+      solutions[day - 1][part_to_run - 1](
+          input_path); // Arrays are 0-based, so subtract 1
       auto end = std::chrono::high_resolution_clock::now();
       // Print execution time
-      print_execution_time(end - start, part + 1);
+      print_execution_time(end - start, part_to_run);
     }
 
   } catch (const std::invalid_argument &e) {

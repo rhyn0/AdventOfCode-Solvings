@@ -4,6 +4,7 @@
 #include <deque>
 #include <iostream>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -35,9 +36,13 @@ enum class RaceCell {
   EMPTY,
   WALL,
 };
+int manhattan_distance(POS p1, POS p2) {
+  return abs(p1.first - p2.first) + abs(p1.second - p2.second);
+}
 class RaceGrid {
 public:
   std::vector<std::vector<RaceCell>> grid;
+  std::vector<std::vector<int>> distances_from_start;
   POS start, end;
   RaceGrid(const std::string &filepath) {
     std::string content = FileReader::readFile(filepath);
@@ -57,6 +62,16 @@ public:
     }
     if (grid[grid.size() - 1].empty()) {
       grid.pop_back();
+    }
+    distances_from_start = std::vector<std::vector<int>>(
+        grid.size(),
+        std::vector<int>(grid[0].size(), std::numeric_limits<int>::max()));
+  }
+  void set_distances_from_start(std::vector<POS> path) {
+    distances_from_start[start.first][start.second] = 0;
+    for (int i = 0; i < static_cast<int>(path.size()); i++) {
+      POS pos = path[i];
+      distances_from_start[pos.first][pos.second] = i + 1;
     }
   }
   bool on_board(POS pos) {
@@ -107,49 +122,34 @@ public:
     return std::vector<POS>();
   }
   RaceCell get_cell(POS pos) { return grid[pos.first][pos.second]; }
-  std::vector<POS> find_cheat_from_point(const std::vector<POS> &path,
-                                         POS point, int max_cheat_length = 2) {
+  std::vector<POS> find_cheat_from_point(POS point, int max_cheat_length = 2) {
     std::vector<POS> ret;
-    std::deque<std::pair<POS, int>> queue = {std::make_pair(point, 0)};
-    while (!queue.empty()) {
-      std::pair<POS, int> curr = queue.front();
-      queue.pop_front();
-      // if the length of the cheat has reached the max, we can stop with this
-      // path
-      if (curr.second == max_cheat_length) {
-        continue;
-      }
-      for (auto neighbor : neighbors(curr.first)) {
-        if (!on_board(neighbor) || neighbor == point) {
+    for (int row = point.first - max_cheat_length;
+         row <= point.first + max_cheat_length; row++) {
+      for (int col = point.second - max_cheat_length;
+           col <= point.second + max_cheat_length; col++) {
+        if (row == point.first && col == point.second) {
           continue;
         }
-        queue.push_back(std::make_pair(neighbor, curr.second + 1));
-        if (std::find(path.begin(), path.end(), neighbor) != path.end()) {
-          ret.push_back(neighbor);
+        if (!on_board({row, col}) || grid[row][col] == RaceCell::WALL ||
+            manhattan_distance(point, {row, col}) > max_cheat_length) {
+          continue;
         }
+        ret.push_back(std::make_pair(row, col));
       }
     }
-    // for (auto neighbor : neighbors(point)) {
-    //   if (!on_board(neighbor) ||
-    //       grid[neighbor.first][neighbor.second] != RaceCell::WALL) {
-    //     continue;
-    //   }
-    //   for (auto pos_point_on_path : neighbors(neighbor)) {
-    //     if (!on_board(pos_point_on_path) || pos_point_on_path == point) {
-    //       continue;
-    //     }
-    //     if (std::find(path.begin(), path.end(), pos_point_on_path) !=
-    //         path.end()) {
-    //       ret.push_back(pos_point_on_path);
-    //     }
-    //   }
-    // }
     return ret;
   }
+  int calculate_cheat_distance(POS start, POS end) {
+    int start_dist = distances_from_start[start.first][start.second];
+    int end_dist = distances_from_start[end.first][end.second];
+    if (start_dist == std::numeric_limits<int>::max() ||
+        end_dist == std::numeric_limits<int>::max()) {
+      return -1;
+    }
+    return end_dist - start_dist - manhattan_distance(start, end);
+  }
 };
-int calculate_cheat_distance(size_t start_idx, size_t end_idx) {
-  return end_idx - start_idx - 2;
-}
 }; // namespace day20
 inline std::ostream &operator<<(std::ostream &os, const day20::RaceGrid &grid) {
   for (size_t row = 0; row < grid.grid.size(); row++) {
@@ -173,14 +173,15 @@ using namespace day20;
 void solve_day20_part1(const std::string &input_path) {
   RaceGrid grid(input_path);
   std::vector<POS> path = grid.find_path_length(grid.start);
+  grid.set_distances_from_start(path);
   std::unordered_map<std::pair<POS, POS>, int> cheat_map;
   int above_threshold_cheats = 0;
   // path doesn't include the start point, which is a valid cheating spot
-  for (auto cheat_end : grid.find_cheat_from_point(path, grid.start)) {
+  for (auto cheat_end : grid.find_cheat_from_point(grid.start)) {
     auto map_key = std::make_pair(grid.start, cheat_end);
     // note the negative one here, because the start is BEFORE the taken path
-    int cheat_distance_savings = calculate_cheat_distance(
-        -1, std::find(path.begin(), path.end(), cheat_end) - path.begin());
+    int cheat_distance_savings =
+        grid.calculate_cheat_distance(grid.start, cheat_end);
     if (cheat_distance_savings <= 0) {
       // no savings in this case
       continue;
@@ -193,13 +194,9 @@ void solve_day20_part1(const std::string &input_path) {
     }
   }
   for (POS point : path) {
-    int starting_idx_on_path =
-        std::find(path.begin(), path.end(), point) - path.begin();
-    for (auto cheat_end : grid.find_cheat_from_point(path, point)) {
-      int second =
-          std::find(path.begin(), path.end(), cheat_end) - path.begin();
+    for (auto cheat_end : grid.find_cheat_from_point(point)) {
       int cheat_distance_savings =
-          calculate_cheat_distance(starting_idx_on_path, second);
+          grid.calculate_cheat_distance(point, cheat_end);
       auto map_key = std::make_pair(point, cheat_end);
       if (cheat_distance_savings <= 0) {
         // no savings in this case
@@ -224,6 +221,54 @@ void solve_day20_part1(const std::string &input_path) {
   std::cout << "\nPart 1: " << above_threshold_cheats << std::endl;
 }
 void solve_day20_part2(const std::string &input_path) {
-  std::cout << "\nPart 2: " << input_path << std::endl;
+  RaceGrid grid(input_path);
+  std::vector<POS> path = grid.find_path_length(grid.start);
+  grid.set_distances_from_start(path);
+  std::unordered_map<std::pair<POS, POS>, int> cheat_map;
+  int above_threshold_cheats = 0;
+  // path doesn't include the start point, which is a valid cheating spot
+  for (auto cheat_end : grid.find_cheat_from_point(grid.start, 20)) {
+    auto map_key = std::make_pair(grid.start, cheat_end);
+    // note the negative one here, because the start is BEFORE the taken path
+    int cheat_distance_savings =
+        grid.calculate_cheat_distance(grid.start, cheat_end);
+    if (cheat_distance_savings <= 0) {
+      // no savings in this case
+      continue;
+    }
+    if (!cheat_map.contains(map_key)) {
+      // if the savings are better than the previous one, replace it
+      cheat_map[map_key] = cheat_distance_savings;
+    } else if (cheat_map[map_key] < cheat_distance_savings) {
+      cheat_map[map_key] = cheat_distance_savings;
+    }
+  }
+  for (int i = 0; i < static_cast<int>(path.size()); i++) {
+    POS point = path[i];
+    for (auto cheat_end : grid.find_cheat_from_point(point, 20)) {
+      int cheat_distance_savings =
+          grid.calculate_cheat_distance(point, cheat_end);
+      auto map_key = std::make_pair(point, cheat_end);
+      if (cheat_distance_savings <= 0) {
+        // no savings in this case
+        continue;
+      }
+      if (cheat_map.find(map_key) == cheat_map.end()) {
+        // insert because it doesn't exist
+        cheat_map[map_key] = cheat_distance_savings;
+      } else {
+        // if the savings are better than the previous one, replace it
+        if (cheat_map[map_key] < cheat_distance_savings) {
+          cheat_map[map_key] = cheat_distance_savings;
+        }
+      }
+    }
+  }
+  for (auto [key, value] : cheat_map) {
+    if (value >= CHEAT_THRESHOLD) {
+      above_threshold_cheats++;
+    }
+  }
+  std::cout << "\nPart 2: " << above_threshold_cheats << std::endl;
 }
 }; // namespace aoc

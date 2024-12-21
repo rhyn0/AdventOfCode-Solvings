@@ -52,6 +52,23 @@ This folder section will use `clang-tidy` for linting. Configuration is close to
 clang-tidy -p build src/**/*.{c,h}pp
 ```
 
+## Helpful Commands for Debugging
+
+### Day 20
+
+To make sure i generated all the possible cheats for the sample input, I added the following line at the bottom of `day20.cpp` Part 1
+```cpp
+ std::cout << "BEST CHEAT from: " << key.first.first << ","
+              << key.first.second << " to " << key.second.first << ","
+              << key.second.second << " saves " << value << " steps\n";
+```
+
+Then used the following shell command to group and count the cheats based on the number of steps saved.
+
+```shell
+./aoc-rhyn0 20 ../sample_inputs/day20.txt --part 1  | grep -E '^BEST CHEAT' | grep -o -E '\d+ steps' | cut -d' ' -f1 | sort | uniq -c | sort -n -r
+```
+
 ## References
 
 *Incomplete List of Helpful Insights*
