@@ -24,6 +24,7 @@
 #include "solutions/day16.hpp"
 #include "solutions/day17.hpp"
 #include "solutions/day18.hpp"
+#include "solutions/day19.hpp"
 // ... add more as you implement them
 
 using solve_function = void (*)(const std::string &);
@@ -77,6 +78,7 @@ int main(int argc, char *argv[]) {
         {aoc::solve_day16_part1, aoc::solve_day16_part2}, // day 16
         {aoc::solve_day17_part1, aoc::solve_day17_part2}, // day 17
         {aoc::solve_day18_part1, aoc::solve_day18_part2}, // day 18
+        {aoc::solve_day19_part1, aoc::solve_day19_part2}, // day 19
         // Add more solution functions as you implement them
     };
 
