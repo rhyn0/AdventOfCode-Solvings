@@ -82,3 +82,9 @@ Then used the following shell command to group and count the cheats based on the
 
 I really have no idea what im doing here, will have to come back to this one. 1am coding is not cutting this.
 HAHA, i love changing data types for my whole codebase at a later time.
+
+### Day 24 Part 2
+
+- [Full Adder Circuit Diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Full-adder_logic_diagram.svg/1920px-Full-adder_logic_diagram.svg.png)
+
+Back to the EE days, essentially want to do a bunch of 1 bit full-adders but only use wire names to solve with.
