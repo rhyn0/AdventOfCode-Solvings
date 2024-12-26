@@ -20,6 +20,8 @@
     "rust-analyzer.inlayHints.chainingHints.enable": true,
     "editor.inlayHints.fontFamily": "Monaspace Krypton",
     "editor.formatOnSave": true,
+    // might have to mess with this due to 'conflicting' formatters
+    "editor.defaultFormatter": "ms-python.black-formatter",
     "ruff.enable": true,
     "ruff.path": [
         // this won't work on different machines. Should probably open an issue
@@ -27,7 +29,6 @@
     ],
     "ruff.lint.enable": true,
     "ruff.lint.run": "onType",
-    "ruff.fixAll": true,
     "ruff.importStrategy": "fromEnvironment",
     "mypy-type-checker.path": [
         // due to VSCode LSP bug, we also have to unset the path

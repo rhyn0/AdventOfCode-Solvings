@@ -9,6 +9,7 @@ Options:
     --verbose   Use python logging to get verbose output of what is going on
                 in a log file.
 """
+
 from __future__ import annotations
 
 # Standard Library

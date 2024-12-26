@@ -11,6 +11,7 @@ Options:
     --quiet         Disable logging for example mode.
     --parts PART    Do only specified part, options are 'a', 'b', or 'ab'. [default: ab]
 """
+
 from __future__ import annotations
 
 # Standard Library
@@ -405,9 +406,9 @@ class GroveCube(GroveGrid):
         LOG.debug("Faces begin dict %s", edge_positions_face)
         # for each disconnected edge, have to move position to
         # appropriate location on new face
-        self._transform_d: dict[
-            tuple[Facing, GridLoc], tuple[Facing, LinTransform]
-        ] = {}
+        self._transform_d: dict[tuple[Facing, GridLoc], tuple[Facing, LinTransform]] = (
+            {}
+        )
         # rename for ease of use
         td = self._transform_d
         for face, discon in discon_edges.items():
@@ -431,19 +432,25 @@ class GroveCube(GroveGrid):
                 # so make sure each is in proper corner
                 # RIGHT -> top right, DOWN -> bottom right etc
                 main_corner = (main_loc * edge_len) + GridLoc(
-                    edge_len - 1
-                    if main_leave_dir in {Facing.DOWN, Facing.RIGHT}
-                    else 0,
+                    (
+                        edge_len - 1
+                        if main_leave_dir in {Facing.DOWN, Facing.RIGHT}
+                        else 0
+                    ),
                     edge_len - 1 if main_leave_dir in {Facing.DOWN, Facing.LEFT} else 0,
                 )
                 # one corner forward, since they fold together its flipped
                 discon_corner = (discon_loc * edge_len) + GridLoc(
-                    edge_len - 1
-                    if discon_leave_dir in {Facing.UP, Facing.RIGHT}
-                    else 0,
-                    edge_len - 1
-                    if discon_leave_dir in {Facing.DOWN, Facing.RIGHT}
-                    else 0,
+                    (
+                        edge_len - 1
+                        if discon_leave_dir in {Facing.UP, Facing.RIGHT}
+                        else 0
+                    ),
+                    (
+                        edge_len - 1
+                        if discon_leave_dir in {Facing.DOWN, Facing.RIGHT}
+                        else 0
+                    ),
                 )
                 trans = LinTransform.make_transform(*-main_corner)
                 match (main_leave_dir - ~discon_leave_dir) % 4:
